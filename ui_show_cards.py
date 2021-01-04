@@ -88,7 +88,7 @@ class Ui__show_cards(object):
         self._card_img.setMinimumSize(QtCore.QSize(500, 0))
         self._card_img.setStyleSheet("QFrame{\n"
 "    background: white;\n"
-"    border-radius: 20px;\n"
+"    border-radius: 5px;\n"
 "}")
         self._card_img.setFrameShape(QtWidgets.QFrame.NoFrame)
         self._card_img.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -116,7 +116,7 @@ class Ui__show_cards(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self._img.sizePolicy().hasHeightForWidth())
         self._img.setSizePolicy(sizePolicy)
-        self._img.setMinimumSize(QtCore.QSize(0, 0))
+        self._img.setMinimumSize(QtCore.QSize(0, 200))
         self._img.setMaximumSize(QtCore.QSize(16777215, 200))
         self._img.setAlignment(QtCore.Qt.AlignCenter)
         self._img.setObjectName("_img")

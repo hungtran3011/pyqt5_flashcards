@@ -39,8 +39,7 @@ class Ui__add_deck(object):
         self._new_deck_box.setStyleSheet("height: 20px;\n"
 "border-radius: 10px;\n"
 "background-color: rgb(222, 222, 222);\n"
-"padding: 5px;\n"
-"/*padding-right: 5px;*/")
+"padding: 5px;")
         self._new_deck_box.setObjectName("_new_deck_box")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self._new_deck_box)
         self.verticalLayout.addWidget(self._new_deck_frame)

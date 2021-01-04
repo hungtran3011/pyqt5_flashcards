@@ -16,6 +16,7 @@ class Ui__add_card(object):
         _add_card.setObjectName("_add_card")
         _add_card.resize(465, 340)
         _add_card.setWindowOpacity(1.0)
+        _add_card.setStyleSheet("background: white;")
         self.verticalLayout = QtWidgets.QVBoxLayout(_add_card)
         self.verticalLayout.setObjectName("verticalLayout")
         self._add_card_form = QtWidgets.QFrame(_add_card)
@@ -34,6 +35,9 @@ class Ui__add_card(object):
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.LabelRole, self._front_label)
         self._front_box = QtWidgets.QTextEdit(self._add_card_form)
         self._front_box.setMinimumSize(QtCore.QSize(0, 100))
+        self._front_box.setStyleSheet("border-radius: 10px;\n"
+"background-color: #dedede;\n"
+"padding: 5px;")
         self._front_box.setObjectName("_front_box")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.FieldRole, self._front_box)
         self._back_label = QtWidgets.QLabel(self._add_card_form)
@@ -41,12 +45,29 @@ class Ui__add_card(object):
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.LabelRole, self._back_label)
         self._back_box = QtWidgets.QTextEdit(self._add_card_form)
         self._back_box.setMinimumSize(QtCore.QSize(0, 100))
+        self._back_box.setStyleSheet("border-radius: 10px;\n"
+"background-color: #dedede;\n"
+"padding: 5px;")
         self._back_box.setObjectName("_back_box")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.FieldRole, self._back_box)
         self._img_label = QtWidgets.QLabel(self._add_card_form)
         self._img_label.setObjectName("_img_label")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.LabelRole, self._img_label)
         self._choose_image = QtWidgets.QPushButton(self._add_card_form)
+        self._choose_image.setStyleSheet("QPushButton{\n"
+"    /*background: #d3d3d3;*/\n"
+"    border: 2px solid #91e67b;\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"    padding-left: 10px;\n"
+"    padding-right: 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color: #91e67b;\n"
+"    color: white;\n"
+"}\n"
+"")
         self._choose_image.setObjectName("_choose_image")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.FieldRole, self._choose_image)
         self.verticalLayout.addWidget(self._add_card_form)
