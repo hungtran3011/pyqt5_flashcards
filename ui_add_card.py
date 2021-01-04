@@ -82,7 +82,7 @@ class Ui__add_card(object):
         self.horizontalLayout.addWidget(self._cancel_button)
         self._save_button = QtWidgets.QPushButton(self._button_frame)
         self._save_button.setStyleSheet("QPushButton{\n"
-"    background-color: rgb(85, 170, 255);\n"
+"    background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );\n"
 "    color: white;\n"
 "    padding: 5px;\n"
 "    padding-left: 10px;\n"
@@ -91,7 +91,11 @@ class Ui__add_card(object):
 "}\n"
 "\n"
 "QPushButton:hover{\n"
-"    background-color: rgb(85, 85, 255)\n"
+"    background-color: #81cc6e;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 1 #77bd65, stop: 0 #91e67b );\n"
 "}")
         self._save_button.setObjectName("_save_button")
         self.horizontalLayout.addWidget(self._save_button)

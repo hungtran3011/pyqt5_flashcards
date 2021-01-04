@@ -151,6 +151,10 @@ class Ui__deck_info(object):
 "    padding-right: 10px;*/\n"
 "}\n"
 "\n"
+"QToolButton::menu-indicator{\n"
+"    width: 0px;\n"
+"}\n"
+"\n"
 "QToolButton:hover{\n"
 "    background-color: #91e67b;\n"
 "    color: white;\n"
@@ -174,14 +178,3 @@ class Ui__deck_info(object):
         self._game_mode.setText(_translate("_deck_info", "Game mode"))
         self._view_cards_list.setText(_translate("_deck_info", "View cards list"))
         self._more_funcs.setText(_translate("_deck_info", "..."))
-
-if __name__ == '__main__':
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    window = QtWidgets.QWidget()
-    window.setWindowTitle("Flashcards - All decks")
-    box = QtWidgets.QGroupBox(window)
-    ui = Ui__deck_info()
-    ui.setupUi(box)
-    window.show()
-    app.exec_()

@@ -40,7 +40,7 @@ class Ui__card_info(object):
         self.scrollArea.setWidgetResizable(True)
         self.scrollArea.setObjectName("scrollArea")
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 199, 68))
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 199, 79))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -52,7 +52,7 @@ class Ui__card_info(object):
         self._back.setAlignment(QtCore.Qt.AlignCenter)
         self._back.setObjectName("_back")
         self.verticalLayout_2.addWidget(self._back)
-        self.scrollArea.setWidget(self._back)
+        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.verticalLayout.addWidget(self.scrollArea)
         self._img_frame = QtWidgets.QFrame(_card_info)
         self._img_frame.setStyleSheet("background-color: white;")
@@ -82,19 +82,23 @@ class Ui__card_info(object):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
-        self._options = QtWidgets.QToolButton(self.frame)
-        self._options.setStyleSheet("QToolButton#_options{\n"
+        self._options = QtWidgets.QPushButton(self.frame)
+        self._options.setStyleSheet("QPushButton#_options{\n"
 "    height: 30px;\n"
 "    width: 30px;\n"
 "    border-radius: 15px;\n"
 "    background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );\n"
 "}\n"
 "\n"
-"QToolButton#_options:hover{\n"
+"QPushButton::menu-indicator{\n"
+"    width: 0px;\n"
+"}\n"
+"\n"
+"QPushButton#_options:hover{\n"
 "    background-color: #81cc6e;\n"
 "}\n"
 "\n"
-"QToolButton#_options:pressed{\n"
+"QPushButton#_options:pressed{\n"
 "    background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 1 #77bd65, stop: 0 #91e67b );\n"
 "}")
         self._options.setObjectName("_options")
