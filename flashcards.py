@@ -1,6 +1,5 @@
 import sys
 import os
-# from os.path import expanduser
 import random as rand
 from datetime import date, datetime
 from platform import system
@@ -27,16 +26,12 @@ ROOT_DIR = Path(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file_
 print(ROOT_DIR)
 
 SYSTEM = system()
-# IMG_DIR = Path.cwd() / ROOT_DIR / "img"
-# DECKS_DIR = Path.cwd() / ROOT_DIR / "decks"
 IMG_DIR = ROOT_DIR / "img"
 DECKS_DIR = ROOT_DIR / "decks"
-
-# class ClickableFrame(QtWidgets.QFrame):
-#     def __init__(self, parent=None, *args, **kwargs):
-#         super().__init__(parent)
-
-#     def mousePressEvent(self, event)
+if not os.path.isdir(IMG_DIR):
+    os.mkdir(IMG_DIR)
+if not os.path.isdir(DECKS_DIR):
+    os.mkdir(DECKS_DIR)
 
 
 class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
@@ -65,7 +60,6 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
         DECKS_NUM = len(DECKS_LIST)
         if len(DECKS_LIST) > 0:
-            # print(self._all_decks_area.width())
             columns = self._all_decks_area.width() // 480
             rows = DECKS_NUM // columns 
             print(columns, rows)
@@ -75,7 +69,6 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             for row in range(rows):
                 for col in range(columns):
                     index = columns * row + col
-                    # print(index)
                     deck_name = DeckInfo(self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
                     self.getDeckArea().addWidget(deck_name, row, col)
             if remainder != 0:
@@ -120,15 +113,12 @@ class AddDeck(Ui__add_deck, QtWidgets.QDialog):
 
         name = self._new_deck_box.text()
         file_name = f"{DECKS_DIR}/{name}.db"
-        # print(file_name)
         file_list = os.listdir(DECKS_DIR)
         restricted_char = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*"]
         if name == "":
             self._sendMessage("The name must not be blank")
         else:
             if file_name.split("/")[-1] not in file_list:
-                # print(file_name in file_list)
-                # print(file_list)
                 if isValidFileName(name):
                     open(file_name, "a+").close()
                     out = io_.Output(name)
@@ -204,11 +194,10 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
         self._view_mode = CardsList(self, self.deck)
 
     def _deleteDeck(self):
-        os.chdir(os.path.dirname(__file__))
+        # os.chdir(os.path.dirname(__file__))
         file_name = f"{DECKS_DIR}/{self.getDeckName()}.db"
         os.remove(file_name)
         img_folder_name = f"{IMG_DIR}/{self.getDeckName()}"
-        # os.rmdir(img_folder_name)
         rmtree(img_folder_name)
         window._showAllDecks()
 
@@ -226,6 +215,7 @@ class FlashMode(Ui__show_cards, QtWidgets.QDialog):
         self.deck = deck
         self.setupUi(self)
         self.setWindowTitle(f"Cards from: {self.deck}")
+        self._img.setText("")
         shadow = QtWidgets.QGraphicsDropShadowEffect(blurRadius=30, xOffset=0, yOffset=0)
         shadow.setColor(QtGui.QColor(211, 211, 211))
         self._card_img.setGraphicsEffect(shadow)
@@ -278,13 +268,10 @@ class FlashMode(Ui__show_cards, QtWidgets.QDialog):
                 if not pixmap.isNull():
                     self._img.setPixmap(pixmap.scaledToWidth(300))
                 else:
-                    pixmap = QtGui.QPixmap(f"{IMG_DIR}/white.jpg")
-                    self._img.setPixmap(pixmap.scaledToWidth(300))
+                    pass
 
             elif self._face == 1:
                 self._card.setText(back)
-                pixmap = QtGui.QPixmap(f"{IMG_DIR}/white.jpg")
-                self._img.setPixmap(pixmap.scaledToWidth(300))
                 
             if self._number == len(self.front_list) - 1:
                 self._next.setEnabled(False)
@@ -337,14 +324,6 @@ class FlashMode(Ui__show_cards, QtWidgets.QDialog):
         self._add_card_dialog = AddCard(self, self.deck)
         self._refreshCards()
 
-    def keyPressEvent(self, event):
-        if event.key() == QtCore.Qt.Key_Left: 
-            self._prevCard()
-        elif event.key() == QtCore.Qt.Key_Right:
-            self._nextCard()
-        # elif event.key() == Qt.Key_Up:
-        #     self._flipCard()  
-
     def _flipAnimationClicked(self, event):
         self._flipCard()
         shadow = QtWidgets.QGraphicsDropShadowEffect(blurRadius=5, xOffset=0, yOffset=0)
@@ -361,8 +340,6 @@ class GameMode(QtWidgets.QDialog):
     def __init__(self, parent, deck=None):
         super().__init__(parent)
         self.deck = deck
-        # self.setupUi(self)
-        # self._back.clicked.connect(self.close)
         label = QtWidgets.QLabel("This feature is being developed", self)
         label.adjustSize()
         self.adjustSize()
@@ -428,18 +405,9 @@ class CardsList(QtWidgets.QDialog, Ui__cards_list):
         self._refresh_shortcut.activated.connect(self._showItems)
         self._cards_table.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
         self._cards_table.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
-        self._cards_table.doubleClicked.connect(self.boo)
         self._showItems()
         self.setWindowTitle(f"Cards list from deck: {self.deck}")
         self.exec_()
-
-    def boo(self):
-        print(self._cards_table.selectedIndexes())
-        index = self._cards_table.selectedIndexes()
-        for i in index:
-            id_us = self._cards_table.model().data(i)
-            print(id_us, end=" ")
-        print()
 
     def _showItems(self):
         self._cards_list = io_.Input(self.deck).fetchDataFromDBDeck()
@@ -454,7 +422,6 @@ class CardsList(QtWidgets.QDialog, Ui__cards_list):
     def _deleteCard(self):
         current_row = self._cards_table.currentRow()
         word = self._cards_table.item(current_row, 0).text()
-        print(word)
         db = io_.Input(self.deck)
         out = io_.Output(self.deck)
         out.cursor.execute("DELETE FROM DECK WHERE FRONT = ?", (word,))
@@ -468,13 +435,10 @@ class CardsList(QtWidgets.QDialog, Ui__cards_list):
         out.conn.commit()
         out.createTable("DECK")
         for key, val in enumerate(tmp_deck):
-            print(key)
             data = (key + 1,) + val
             out.writeToDB(data, "DECK")
-        print(tmp_deck)
         db.cursor.execute("SELECT CARD, LAST_REVIEW, NEXT_REVIEW FROM DATE_")
         tmp_date = db.cursor.fetchall()
-        print(tmp_date)
         out.cursor.execute("DROP TABLE DATE_")
         out.conn.commit()
         out.createTable("DATE_")
@@ -670,10 +634,6 @@ class CardInfo(QtWidgets.QGroupBox, Ui__card_info):
         self.setGraphicsEffect(shadow)
         self._displayCardInfo()
         self.setCursor(QtCore.Qt.PointingHandCursor)
-        # self.contextMenu = QtWidgets.QMenu()
-        # self.contextMenu.addAction("Delete card").triggered.connect(self._deleteCard)
-        # self.contextMenu.addAction("Edit card").triggered.connect(self._editCard)
-        # self._options.setMenu(self.contextMenu)
         self._options.setCursor(QtCore.Qt.PointingHandCursor)
 
     def _displayCardInfo(self):
@@ -695,6 +655,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = BrowseDeck()
     window.setWindowTitle("Flashcards - All decks")
-    window.setWindowIcon(QtGui.QIcon("flash.ico"))
+    window.setWindowIcon(QtGui.QIcon(f"{IMG_DIR}/flash.ico"))
     window.show()
     app.exec_()
