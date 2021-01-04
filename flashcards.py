@@ -695,6 +695,6 @@ if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
     window = BrowseDeck()
     window.setWindowTitle("Flashcards - All decks")
-    window.setWindowIcon(QtGui.QIcon(f"{IMG_DIR}/flash.ico"))
+    window.setWindowIcon(QtGui.QIcon("flash.ico"))
     window.show()
     app.exec_()
