@@ -19,6 +19,7 @@ from ui_rename_deck import Ui__rename_deck
 from ui_edit_card import Ui__edit_card
 from ui_new_cards_list import Ui__new_cards_list
 from ui_card_info import Ui__card_info
+from ui_game_mode import Ui__game_mode
 
 import io_
 
@@ -336,13 +337,12 @@ class FlashMode(Ui__show_cards, QtWidgets.QDialog):
         self._card_img.setGraphicsEffect(shadow)
 
     
-class GameMode(QtWidgets.QDialog):
+class GameMode(QtWidgets.QDialog, Ui__game_mode):
     def __init__(self, parent, deck=None):
         super().__init__(parent)
         self.deck = deck
-        label = QtWidgets.QLabel("This feature is being developed", self)
-        label.adjustSize()
-        self.adjustSize()
+        self.setupUi(self)
+        # self.adjustSize()
         self.exec_()
 
 
@@ -527,21 +527,24 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
             tmp[-2] = self.word
             img_file_ = ".".join(tmp)
             tmp_link = f"{IMG_DIR}/{self.deck}/{img_file_}"
+            print()
+            if self._img_file != "":
+                import shutil
+                if not os.path.exists(f'{os.path.splitext(tmp_link)}.*'):
+                    shutil.copyfile(self._img_file, tmp_link)
+                else:
+                    os.remove(f'{os.path.splitext(tmp_link)}.*')
+                    shutil.copyfile(self._img_file, tmp_link)
+            else:
+                pass
+            output = io_.Output(self.deck)
+            output.updateTable("DECK", "IMG", tmp_link, condition=f"FRONT='{self.word}'")
         except:
             pass
-        if self._img_file != "":
-            import shutil
-            if not os.path.exists(f'{os.path.splitext(tmp_link)}.*'):
-                shutil.copyfile(self._img_file, tmp_link)
-            else:
-                os.remove(f'{os.path.splitext(tmp_link)}.*')
-                shutil.copyfile(self._img_file, tmp_link)
-        else:
-            pass
-        output = io_.Output(self.deck)
-        output.updateTable("DECK", "IMG", tmp_link, f"FRONT='{self.word}'")
-        output.updateTable("DECK", "BACK", self._back_box.toPlainText(), f"FRONT='{self.word}'")
-        self.close()
+        finally:
+            output = io_.Output(self.deck)
+            output.updateTable("DECK", "BACK", self._back_box.toPlainText(), f"FRONT='{self.word}'")
+            self.close()
 
 #The new cards list classes
 class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
@@ -550,8 +553,6 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         self.setupUi(self)
         self.deck = deck
         self.cards_data_widgets = []
-        inp = io_.Input(self.deck)
-        self.cards_data = inp.fetchDataFromDBDeck()
         self.setWindowTitle(f"Deck: {self.deck}")
         self.label.setText(f"Cards list from deck: {self.deck}")
         self._createCardsList()
@@ -562,6 +563,8 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         return self.gridLayout_2
 
     def _createCardsList(self):
+        inp = io_.Input(self.deck)
+        self.cards_data = inp.fetchDataFromDBDeck()
         num_of_cards = len(self.cards_data)
         if num_of_cards > 0:
             columns = self._all_cards_area.width() // 230
@@ -621,6 +624,19 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
             out.writeToDB(data, "DATE_")
         self._createCardsList()
 
+    def keyPressEvent(self, event):
+        print(event.key())
+        print(QtCore.Qt.Key_F5)
+        if event.key() == QtCore.Qt.Key_F5:
+            self._createCardsList()
+
+    def mousePressEvent(self, event):
+        if event.button() == QtCore.Qt.RightButton:
+            menu = QtWidgets.QMenu(self)
+            menu.addAction("Refresh").triggered.connect(self._createCardsList)
+            # self.setMenu(menu)
+            menu.popup(self.mapToGlobal(event.pos()))
+
 class CardInfo(QtWidgets.QGroupBox, Ui__card_info):
     def __init__(self, parent, card_info: tuple, deck=None):
         super().__init__(parent)
@@ -646,9 +662,12 @@ class CardInfo(QtWidgets.QGroupBox, Ui__card_info):
         else:
             self._img.setText("")
 
-    def mousePressEvent(self, event):
+    def editCard(self):
         self._editCard = EditCard(self, self.deck, self._front.text())
         self._displayCardInfo()
+
+    def mousePressEvent(self, event):
+        self.editCard()
 
 
 if __name__ == '__main__':
