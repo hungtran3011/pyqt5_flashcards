@@ -14,5 +14,4 @@ Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="h
   <li>Speaking card </li>
  </ul>
 <br>
-<b>Note</b>: When running the scripts, please create new folders named "decks" and "img"
-to run smoothly.
+
