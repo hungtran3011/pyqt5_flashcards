@@ -15,7 +15,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets, QtSvg
 from ui_browse_deck import Ui__browse_deck
 from ui_deck_info import Ui__deck_info
 from ui_show_cards import Ui__show_cards
-from ui_add_deck import Ui__add_deck
 from ui_cards_list import Ui__cards_list
 from ui_add_card import Ui_add_card
 from ui_rename_deck import Ui__rename_deck
