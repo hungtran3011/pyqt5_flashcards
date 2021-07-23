@@ -1,7 +1,7 @@
 # pyqt5_flashcards
 The basic flashcards app made of Python and Qt5 <br>
-Python version used here: Python 3.8.5 <br>
-Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="https://pypi.org/project/PyQt5/">here</a>, with Qt 5.15.1<br>
+Python version used here: Python 3.8. <br>
+Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="https://pypi.org/project/PyQt5/">here</a>, with Qt 5.15<br>
 <br>
 <b>Functions</b><br>
   - Add decks and cards to study <br>
