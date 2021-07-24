@@ -137,53 +137,6 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             menu.popup(self.mapToGlobal(event.pos()))
 
 
-# class AddDeck(Ui__add_deck, QtWidgets.QDialog):
-#     def __init__(self, parent):
-#         super().__init__(parent)
-#         self.setupUi(self)
-#         self._cancel_button.clicked.connect(self.close)
-#         self._save_button.clicked.connect(self._save)
-#         self.exec_()
-
-#     def _sendMessage(self, message):
-#         self._message.setText(message)
-
-#     def _save(self):
-#         def isValidFileName(file_name):
-#             restricted_char = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*"]
-#             if len(file_name) == 0 or len(file_name) > 256:
-#                 return False
-#             else:
-#                 for i in file_name:
-#                     if i in restricted_char:
-#                         return False
-#             return True
-
-#         name = self._new_deck_box.text()
-#         file_name = f"{DECKS_DIR}/{name}.db"
-#         file_list = os.listdir(DECKS_DIR)
-#         restricted_chars = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*"]
-#         if name == "":
-#             self._sendMessage("The name must not be blank")
-#         else:
-#             if file_name.split("/")[-1] not in file_list:
-#                 if isValidFileName(name):
-#                     open(file_name, "a+").close()
-#                     out = io_.SQLiteOutput(name)
-#                     out.createTable("DECK")
-#                     out.createTable("DATE_")
-#                     # window.getBrowseDeckWidget()._show_all_decks()
-#                     window.setBrowseDecksMode()
-#                     os.chdir(f"{IMG_DIR}")
-#                     os.mkdir(f"{IMG_DIR}/{name}")
-#                     self.close()
-#                 else:
-#                     self._sendMessage(f"""Can't add new deck. Please try a different name.
-#     Note: Don't use these characters: {", ".join(restricted_chars)}""")
-#             else:
-#                 self._sendMessage(f"""The deck {file_name.split("/")[-1].split(".")[0]} has been existed""")
-
-
 class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
     def __init__(self, parent) -> None:
         super().__init__(parent)
@@ -329,12 +282,12 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
     def setDeckName(self, new_name):
         self._deck_name.setText(new_name)
         print("name = ", new_name)
-        self._flash_mode.clicked.connect(lambda: self._showFlashMode(new_name))
+        self._flash_mode.clicked.connect(lambda: self._showFlashcardsMode(new_name))
 
     def getDeckName(self):
         return self._deck_name.text()
 
-    def _showFlashMode(self, deck=None):
+    def _showFlashcardsMode(self, deck=None):
         window.setFlashcardsMode(deck)
 
     def _showGameMode(self, deck=None):
@@ -362,13 +315,11 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
         window.setNewCardsList(self.deck)
 
 
-class FlashMode(Ui__show_cards, QtWidgets.QWidget):
+class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__()
         self.deck = None
         self.setupUi(self)
-        #self._add_card.clicked.connect(self._addCard)
-        self._add_card.hide()
         self._flip.clicked.connect(self._flipCard)
         self._next.clicked.connect(self._nextCard)
         self._previous.clicked.connect(self._prevCard)
@@ -946,7 +897,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setCentralWidget(self._stacked_widget)
         self._browse_decks_widget = BrowseDeck(self._stacked_widget)
         self._stacked_widget.addWidget(self._browse_decks_widget)
-        self._flash_mode_widget = FlashMode(self)
+        self._flash_mode_widget = FlashcardsMode(self)
         # self._flash_mode_widget.setStyleSheet()
         self._stacked_widget.addWidget(self._flash_mode_widget)
         self._game_mode_widget = GameMode(self)
