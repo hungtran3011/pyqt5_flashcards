@@ -6,11 +6,12 @@ Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="h
 <b>Functions</b><br>
   - Add decks and cards to study <br>
   - Use flashcards mode to review (w/o spaced repitition) <br>
-  - Edit and delete cards, and deck <br>
+  - Edit and delete decks and cards<br>
 <br>
 <b>Functions that will be added soon</b>
 <ul>
   <li> Play some simple games with the cards added (written game and multiple choice game) </li>
   <li>Speaking card </li>
+  <li>Spaced repitition</li>
  </ul>
 <br>
