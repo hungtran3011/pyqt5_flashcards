@@ -75,7 +75,7 @@ class SQLiteOutput:
     def updateTable(self, table:str, column_to_change:str, data:str, condition:str):
         # The 'condition' argument requires a SQLite condition
         # E.g: FRONT = "text", ID > 1, etc.
-        self.cursor.execute(f"UPDATE ? SET ? = ? WHERE ?", (table, column_to_change, data, condition))
+        self.cursor.execute("UPDATE ? SET ? = ? WHERE ?", (table, column_to_change, data, condition))
         self.conn.commit()
 
     def deleteItem(self, table: str, item: str, ):
