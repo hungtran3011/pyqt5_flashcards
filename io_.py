@@ -4,8 +4,10 @@ from pathlib import Path
 import sys
 import csv
 import json
-import xml.etree.ElementTree as ET
-import xml.dom.minidom as minidom
+# import xml.etree.ElementTree as ET
+# import xml.dom.minidom as minidom
+import defusedxml.ElementTree as ET
+import defusedxml.minidom as minidom
 from io import BytesIO
 
 ROOT_DIR = Path(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))

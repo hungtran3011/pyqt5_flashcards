@@ -56,7 +56,7 @@ class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
             importer = io_.JSONImporter(imported_file)
             self.parsed_data = importer.get_parsed_data()
             print(self.parsed_data)
-        elif self.file_obj[1] == "XML Files (*.XML)":
+        elif self.file_obj[1] == "XML Files (*.xml)":
             importer = io_.XMLImporter(imported_file)
             self.parsed_data = importer.get_parsed_data()
             print(self.parsed_data)
