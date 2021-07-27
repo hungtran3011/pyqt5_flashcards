@@ -24,7 +24,7 @@ class SQLiteInput:
             self.cursor.execute("SELECT * FROM DECK")
             result = self.cursor.fetchall()
             return result
-        except:
+        except sql.OperationalError:
             return []
 
     def fetchDataFromDBDate_(self, condition:str=None):
@@ -42,11 +42,11 @@ class SQLiteInput:
         try:
             tmp_list = self.fetchDataFromDBDeck()
             return tmp_list[3]
-        except:
+        except sql.OperationalError:
             return []
 
     def selectFromDBDeck(self, col_name, data_request):
-        self.cursor.execute(f'SELECT * FROM DECK WHERE {col_name} = ?', (data_request,))
+        self.cursor.execute(f'SELECT * FROM DECK WHERE ? = ?', (col_name, data_request,))
         return self.cursor.fetchall()
 
 

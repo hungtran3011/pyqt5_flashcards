@@ -151,7 +151,7 @@ class ModifiedGameMode(GameMode):
         window.setBrowseDecksMode()
 
 
-class ModifiedNewCardsLists(NewCardsList):
+class ModifiedNewCardsList(NewCardsList):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent)
         self._back.clicked.connect(self._back_home)
@@ -173,7 +173,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._stacked_widget.addWidget(self._flash_mode_widget)
         self._game_mode_widget = ModifiedGameMode(self)
         self._stacked_widget.addWidget(self._game_mode_widget)
-        self._new_cards_list = NewCardsList(self)
+        self._new_cards_list = ModifiedNewCardsList(self)
         self._stacked_widget.addWidget(self._new_cards_list)
         self._stacked_widget.setCurrentWidget(self._browse_decks_widget)
         self.adjustSize()
