@@ -12,6 +12,6 @@ Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="h
 <ul>
   <li> Play some simple games with the cards added (written game and multiple choice game) </li>
   <li>Speaking card </li>
-  <li>Spaced repitition</li>
+  <li>Spaced repitition (SM-2 may be used)</li>
  </ul>
 <br>
