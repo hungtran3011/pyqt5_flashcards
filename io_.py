@@ -32,7 +32,7 @@ class SQLiteInput:
             if condition == None:
                 self.cursor.execute("SELECT * FROM DATE_")
             else:
-                self.cursor.execute("SELECT * FROM DATE_ WHERE ?", condition)
+                self.cursor.execute("SELECT * FROM DATE_ WHERE ?", (condition,))
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
@@ -46,7 +46,7 @@ class SQLiteInput:
             return []
 
     def selectFromDBDeck(self, col_name, data_request):
-        self.cursor.execute(f'SELECT * FROM DECK WHERE ? = ?', (col_name, data_request,))
+        self.cursor.execute('SELECT * FROM DECK WHERE ? = ?', (col_name, data_request,))
         return self.cursor.fetchall()
 
 
