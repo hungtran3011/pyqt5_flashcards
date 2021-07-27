@@ -1,36 +1,15 @@
 #!/usr/bin/env python3
-
 import sys
 import os
-import random as rand
-from datetime import date, datetime
 from platform import system
-import shutil
-# from math import ceil
 from pathlib import Path
-import functools
-# import sip
 
-from PyQt5 import QtCore, QtGui, QtWidgets, QtSvg
-
-from ui_package.ui_show_cards import Ui__show_cards
-from ui_package.ui_cards_list import Ui__cards_list
-from ui_package.ui_add_card import Ui_add_card
-from ui_package.ui_edit_card import Ui__edit_card
-from ui_package.ui_new_cards_list import Ui__new_cards_list
-from ui_package.ui_card_info import Ui__card_info
-from ui_package.ui_game_mode import Ui_game_mode
-
+from PyQt5 import QtGui, QtWidgets
 
 from browse_deck import BrowseDeck, DeckInfo
-from add_deck import AddDeck
-from rename_deck import RenameDeck
-from add_cards import AddCards
 from flashcards_mode import FlashcardsMode
 from game_mode import GameMode
 from new_cards_list import NewCardsList
-
-import io_
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
