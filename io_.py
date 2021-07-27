@@ -29,7 +29,7 @@ class SQLiteInput:
 
     def fetchDataFromDBDate_(self, condition:str=None):
         try:
-            if condition == None:
+            if condition is None:
                 self.cursor.execute("SELECT * FROM DATE_")
             else:
                 self.cursor.execute("SELECT * FROM DATE_ WHERE ?", (condition,))
@@ -151,7 +151,7 @@ class JSONExporter:
     def _process_json_extension(self, file_name):
         if not file_name.endswith(".json"):
             file_name += ".json"
-            assert file_name.endswith(".json") == True
+            assert file_name.endswith(".json") is True
         else:
             pass
         return file_name
