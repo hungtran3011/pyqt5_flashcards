@@ -1,1 +1,4 @@
 __pycache__
+decks
+ui
+ui_package/ui_cards_list.py

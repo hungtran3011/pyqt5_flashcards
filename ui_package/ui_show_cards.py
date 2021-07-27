@@ -267,7 +267,6 @@ class Ui__show_cards(object):
         _show_cards.setTabOrder(self._flip, self._shuffle)
         _show_cards.setTabOrder(self._shuffle, self._refresh)
         _show_cards.setTabOrder(self._refresh, self._practice)
-        _show_cards.setTabOrder(self._practice, self._add_card)
 
     def retranslateUi(self, _show_cards):
         _translate = QtCore.QCoreApplication.translate

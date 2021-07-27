@@ -28,12 +28,15 @@ class SQLiteInput:
             return []
 
     def fetchDataFromDBDate_(self, condition:str=None):
-        if condition == None:
-            self.cursor.execute("SELECT * FROM DATE_")
-        else:
-            self.cursor.execute("SELECT * FROM DATE_ WHERE" + condition)
-        result = self.cursor.fetchall()
-        return result
+        try:
+            if condition == None:
+                self.cursor.execute("SELECT * FROM DATE_")
+            else:
+                self.cursor.execute("SELECT * FROM DATE_ WHERE" + condition)
+            result = self.cursor.fetchall()
+            return result
+        except sql.OperationalError:
+            os.remove(f"{ROOT_DIR}/decks/{self.database}.db")
 
     def getImgFile(self):
         try:
