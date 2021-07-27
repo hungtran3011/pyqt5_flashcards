@@ -32,7 +32,7 @@ class SQLiteInput:
             if condition == None:
                 self.cursor.execute("SELECT * FROM DATE_")
             else:
-                self.cursor.execute("SELECT * FROM DATE_ WHERE" + condition)
+                self.cursor.execute("SELECT * FROM DATE_ WHERE ?", condition)
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
@@ -75,7 +75,7 @@ class SQLiteOutput:
     def updateTable(self, table:str, column_to_change:str, data:str, condition:str):
         # The 'condition' argument requires a SQLite condition
         # E.g: FRONT = "text", ID > 1, etc.
-        self.cursor.execute(f"UPDATE {table} SET {column_to_change} = ? WHERE " + condition, (data,))
+        self.cursor.execute(f"UPDATE ? SET ? = ? WHERE ?", (table, column_to_change, data, condition))
         self.conn.commit()
 
     def deleteItem(self, table: str, item: str, ):
