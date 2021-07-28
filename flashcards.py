@@ -32,7 +32,7 @@ class ModifiedBrowseDeck(BrowseDeck):
         self._add_deck.clicked.connect(self.showAddDeck)
         try:
             self._show_all_decks()
-        except:
+        except ZeroDivisionError:
             pass
 
     def getDecksArea(self):

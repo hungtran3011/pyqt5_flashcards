@@ -36,7 +36,8 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
 
     def __insertInfo(self):
         inp = io_.SQLiteInput(self.deck)
-        self.card_info = inp.selectFromDBDeck("FRONT", self.word)[0]
+        print(inp.selectFromDBDeck(self.word))
+        self.card_info = inp.selectFromDBDeck(self.word)[0]
         _, self.front_text, self.back_text, self.img_link = self.card_info
         self._img_file = ""
         self._front.setText(self.front_text)
@@ -71,7 +72,7 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
             output = io_.SQLiteOutput(self.deck)
             output.updateTable("DECK", "IMG", tmp_link,
                                condition=f"FRONT='{self.word}'")
-        except:
+        except :
             pass
         finally:
             output = io_.SQLiteOutput(self.deck)
@@ -168,7 +169,7 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         self._createCardsList()
 
     def resizeEvent(self, event):
-        self.set_deck(self.deck)
+        self._createCardsList()
 
     def _deleteCard(self, card):
         print(card)
