@@ -37,12 +37,12 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         self._add_deck_label = QtWidgets.QLabel("Please add some decks")
         self._add_deck_label.setAlignment(QtCore.Qt.AlignCenter)
         self._create_function_menu()
-        # self.refresh = self._show_all_decks
+        # self.refresh = self.show_all_decks
 
         
 
     def refresh(self):
-        self._show_all_decks()
+        self.show_all_decks()
 
     def getDecksArea(self):
         return self.gridLayout
@@ -63,12 +63,12 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         self._more_funcs.setMenu(function_menu)
 
     def keyPressEvent(self, event=QtCore.Qt.Key_F5):
-        self._show_all_decks()
+        self.show_all_decks()
 
     def mousePressEvent(self, event):
-            menu = QtWidgets.QMenu(self)
-            menu.addAction("Refresh").triggered.connect(self._show_all_decks)
-            menu.popup(self.mapToGlobal(event.pos()))
+        menu = QtWidgets.QMenu(self)
+        menu.addAction("Refresh").triggered.connect(self.show_all_decks)
+        menu.popup(self.mapToGlobal(event.pos()))
             
 
 class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
@@ -81,9 +81,6 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
             blurRadius=20, xOffset=0, yOffset=0)
         shadow.setColor(QtGui.QColor(201, 199, 199))
         self.setGraphicsEffect(shadow)
-        self._game_mode.clicked.connect(
-            functools.partial(self._showGameMode, self.deck)
-        )
         self._game_mode.setCursor(QtCore.Qt.PointingHandCursor)
         self._view_cards_list.setCursor(QtCore.Qt.PointingHandCursor)
         self._flash_mode.setCursor(QtCore.Qt.PointingHandCursor)
@@ -96,7 +93,10 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
     def _evaluateNumOfCards(self):
         deck_name = self.getDeckName()
         inp = io_.SQLiteInput(deck_name)
-        number = len(inp.fetchDataFromDBDeck())
+        try:
+            number = len(inp.fetchDataFromDBDeck())
+        except shutil.Error:
+            number = 0
         text = f'{number} card' if number == 1 else f'{number} cards'
         self._num_of_cards.setText(text)
 

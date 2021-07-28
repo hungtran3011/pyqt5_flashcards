@@ -1,3 +1,4 @@
+from shutil import Error
 import sqlite3 as sql
 import os
 from pathlib import Path
@@ -28,6 +29,7 @@ class SQLiteInput:
             return result
         except sql.OperationalError:
             os.remove(f"{ROOT_DIR}/decks/{self.database}.db")
+            raise Error("Table DECK not found")
 
     def fetchDataFromDBDate_(self, condition:str=None):
         try:

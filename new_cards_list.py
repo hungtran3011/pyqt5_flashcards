@@ -118,18 +118,22 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         (e.g smooth and faster arrange the 'cards') 
         """
         inp = io_.SQLiteInput(self.deck)
-        raw_cards_data = inp.fetchDataFromDBDeck()
+        try:
+            raw_cards_data = inp.fetchDataFromDBDeck()
+        except shutil.Error:
+            raw_cards_data = ()
         delete_cards_data = {}
-        for data in raw_cards_data:
-            delete_cards_data.update(
-                {data[1]: functools.partial(self._deleteCard, data[1])})
         num_of_cards = len(raw_cards_data)
-        for card in reversed(range(self.getCardsArea().count())):
-            tmp_widget = self.getCardsArea().itemAt(card).widget()
-            self.getCardsArea().removeWidget(tmp_widget)
-            tmp_widget.setParent(None)
-            tmp_widget.deleteLater()
         if num_of_cards > 0:
+            for data in raw_cards_data:
+                delete_cards_data.update(
+                    {data[1]: functools.partial(self._deleteCard, data[1])}
+                )
+            for card in reversed(range(self.getCardsArea().count())):
+                tmp_widget = self.getCardsArea().itemAt(card).widget()
+                self.getCardsArea().removeWidget(tmp_widget)
+                tmp_widget.setParent(None)
+                tmp_widget.deleteLater()
             columns = self._all_cards_area.width() // 230
             rows = num_of_cards // columns
             remainder = num_of_cards % columns

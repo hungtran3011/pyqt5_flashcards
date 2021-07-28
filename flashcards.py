@@ -31,14 +31,14 @@ class ModifiedBrowseDeck(BrowseDeck):
         super().__init__()
         self._add_deck.clicked.connect(self.showAddDeck)
         try:
-            self._show_all_decks()
+            self.show_all_decks()
         except ZeroDivisionError:
             pass
 
     def getDecksArea(self):
         return self.gridLayout
-    
-    def _show_all_decks(self):
+
+    def show_all_decks(self):
         DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
         DECKS_NUM = len(DECKS_LIST)
         if len(DECKS_LIST) > 0:
@@ -56,84 +56,79 @@ class ModifiedBrowseDeck(BrowseDeck):
             for row in range(full_rows_num):
                 for col in range(columns):
                     index = columns * row + col
-                    try:
-                        deck_name = ModifiedDeckInfo(
+                    deck_name = ModifiedDeckInfo(
                             self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
-                        self.getDecksArea().addWidget(deck_name, row, col)
-                    except:
-                        col -= 1
+                    self.getDecksArea().addWidget(deck_name, row, col)
             if remainder != 0:
                 new_row = full_rows_num
                 for col in range(remainder):
                     index = new_row * columns + col
-                    try:
-                        deck_name = ModifiedDeckInfo(
-                            self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
-                        self.getDecksArea().addWidget(deck_name, new_row, col)
-                    except:
-                        col -= 1
+                    deck_name = ModifiedDeckInfo(
+                            self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}"
+                    )
+                    self.getDecksArea().addWidget(deck_name, new_row, col)
             self.setNumberOfDecks()
         else:
-                for deck in reversed(range(self.getDecksArea().count())):
-                    tmp_widget = self.getDecksArea().itemAt(deck).widget()
-                    self.getDecksArea().removeWidget(tmp_widget)
-                    tmp_widget.setParent(None)
-                    tmp_widget.deleteLater()
-                self.setNumberOfDecks()
-                self.getDecksArea().addWidget(self._add_deck_icon, 0, 0)
-                self.getDecksArea().addWidget(self._add_deck_label, 1, 0)
+            for deck in reversed(range(self.getDecksArea().count())):
+                tmp_widget = self.getDecksArea().itemAt(deck).widget()
+                self.getDecksArea().removeWidget(tmp_widget)
+                tmp_widget.setParent(None)
+                tmp_widget.deleteLater()
+            self.setNumberOfDecks()
+            self.getDecksArea().addWidget(self._add_deck_icon, 0, 0)
+            self.getDecksArea().addWidget(self._add_deck_label, 1, 0)
 
     def resizeEvent(self, event):
-        self._show_all_decks()
-    
+        self.show_all_decks()
+
     def showAddDeck(self, event):
         try:
             self.showAddDeckPopup()
         finally:
-            window.setBrowseDecksMode()
+            window.set_browse_decks_mode()
 
 
 class ModifiedDeckInfo(DeckInfo):
     def __init__(self, parent, deck, *args, **kwargs):
         super().__init__(parent, deck)
-        self._game_mode.clicked.connect(self._showGameMode)
-        self._view_cards_list.clicked.connect(self._showViewCardsMode)
-        self._flash_mode.clicked.connect(self._showFlashcardsMode)
+        self._game_mode.clicked.connect(self._show_game_mode)
+        self._view_cards_list.clicked.connect(self._show_view_cards_mode)
+        self._flash_mode.clicked.connect(self._show_flashcards_mode)
         self._contextMenu = QtWidgets.QMenu()
-        self._contextMenu.addAction("Delete deck").triggered.connect(self.modified_deleteDeck)
+        self._contextMenu.addAction("Delete deck").triggered.connect(self.modified_delete_deck)
         self._contextMenu.addAction("Rename deck").triggered.connect(self.renameDeck)
         self._more_funcs.setMenu(self._contextMenu)
-    
-    def _showFlashcardsMode(self):
-        window.setFlashcardsMode(self.deck)
 
-    def _showGameMode(self, deck=None):
-        window.setGameMode(self.deck)
+    def _show_flashcards_mode(self):
+        window.set_flashcards_mode(self.deck)
 
-    def _showViewCardsMode(self, deck=None):
+    def _show_game_mode(self, deck=None):
+        window.set_game_mode(self.deck)
+
+    def _show_view_cards_mode(self, deck=None):
         window.setNewCardsList(self.deck)
 
     def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
         window.setNewCardsList(self.deck)
 
-    def modified_deleteDeck(self):
+    def modified_delete_deck(self):
         self.deleteDeck()
-        window.setBrowseDecksMode()
+        window.set_browse_decks_mode()
 
 class ModifiedFlashcardsMode(FlashcardsMode):
     def __init__(self, *args, **kwargs):
         super().__init__()
 
-    def modified_configureWidgets(self):
-        self._back.clicked.connect(window.setBrowseDecksMode)
+    def modified_configure_widgets(self):
+        self._back.clicked.connect(window.set_browse_decks_mode)
         self.configureWidgets()
-    
+
     def modified_set_deck(self, deck, event=None):
         self.set_deck(deck)
-        self.modified_configureWidgets()
+        self.modified_configure_widgets()
 
-    def _practiceDeck(self):
-        window.setGameMode(self.deck)
+    def _practice_deck(self):
+        window.set_game_mode(self.deck)
 
     def back(self):
         try:
@@ -146,9 +141,9 @@ class ModifiedGameMode(GameMode):
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent)
         self.back_button.clicked.connect(self.back)
-    
+
     def back(self):
-        window.setBrowseDecksMode()
+        window.set_browse_decks_mode()
 
 
 class ModifiedNewCardsList(NewCardsList):
@@ -157,7 +152,7 @@ class ModifiedNewCardsList(NewCardsList):
         self._back.clicked.connect(self._back_home)
 
     def _back_home(self):
-        window.setBrowseDecksMode()
+        window.set_browse_decks_mode()
 
 
 class Settings(QtWidgets.QWidget):
@@ -166,7 +161,7 @@ class Settings(QtWidgets.QWidget):
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
-        super().__init__() 
+        super().__init__()
         self.setMinimumSize(600, 536)
         self.setWindowTitle("All decks")
         self.setWindowIcon(QtGui.QIcon(str(IMG_DIR) + "/flash.ico"))
@@ -183,22 +178,22 @@ class MainWindow(QtWidgets.QMainWindow):
         self._stacked_widget.setCurrentWidget(self._browse_decks_widget)
         self.adjustSize()
 
-    def getBrowseDeckWidget(self):
+    def get_browse_decks_widget(self):
         return self._browse_decks_widget
 
-    def setBrowseDecksMode(self):
+    def set_browse_decks_mode(self):
         self._stacked_widget.setCurrentWidget(self._browse_decks_widget)
         self.setWindowTitle("All decks")
-        self._browse_decks_widget._show_all_decks()
+        self._browse_decks_widget.show_all_decks()
 
-    def setFlashcardsMode(self, deck):
+    def set_flashcards_mode(self, deck):
         self._stacked_widget.setCurrentWidget(self._flash_mode_widget)
         self._flash_mode_widget.modified_set_deck(deck)
         print(self._flash_mode_widget.deck)
         self.setWindowTitle(f"Flashcards mode from deck: {deck}")
         # self._flash_mode_widget.configureWidgets()
 
-    def setGameMode(self, deck):
+    def set_game_mode(self, deck):
         self._stacked_widget.setCurrentWidget(self._game_mode_widget)
         self._game_mode_widget.set_deck(deck)
         self.setWindowTitle(f"Practice mode/ Game mode for deck: {deck}")
@@ -216,3 +211,4 @@ if __name__ == '__main__':
     window = MainWindow()
     window.show()
     app.exec_()
+    

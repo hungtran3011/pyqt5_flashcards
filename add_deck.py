@@ -9,7 +9,6 @@ from PyQt5 import QtCore, QtGui, QtWidgets, QtSvg
 from ui_package.ui_new_add_deck import Ui_new_add_deck
 
 import io_
-from rename_deck import RenameDeck
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
