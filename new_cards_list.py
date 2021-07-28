@@ -244,4 +244,3 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
 
         def delete_card(self, card:str):
             self.parent_widget._delete_card(card)
-

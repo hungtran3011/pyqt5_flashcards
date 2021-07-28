@@ -141,4 +141,3 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
 
     def renameDeck(self):
         self._rename_window = RenameDeck(self, self.deck)
-
