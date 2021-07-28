@@ -21,6 +21,7 @@ DECKS_DIR = ROOT_DIR / "decks"
 
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
+
 class EditCard(QtWidgets.QDialog, Ui__edit_card):
     def __init__(self, parent, deck, word):
         super().__init__(parent)
@@ -85,16 +86,13 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
 # with customized and editable groupboxes (look like cards) for information:
 # front, back, image
 
+
 class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
     def __init__(self, parent):
         super().__init__(parent)
         self.setupUi(self)
         self._add_card.clicked.connect(self._addCard)
         self.deck = ""
-        self._add_card_label = QtWidgets.QLabel("Please add some cards")
-        self._add_card_label.setAlignment(QtCore.Qt.AlignCenter)
-        self._add_card_icon = QtSvg.QSvgWidget(ADD_CARDS_ICON)
-        self._add_card_icon.setMaximumSize(200, 200)
 
     def set_deck(self, deck):
         self.deck = deck
@@ -122,13 +120,8 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
             raw_cards_data = inp.fetchDataFromDBDeck()
         except shutil.Error:
             raw_cards_data = ()
-        delete_cards_data = {}
         num_of_cards = len(raw_cards_data)
         if num_of_cards > 0:
-            for data in raw_cards_data:
-                delete_cards_data.update(
-                    {data[1]: functools.partial(self._deleteCard, data[1])}
-                )
             for card in reversed(range(self.getCardsArea().count())):
                 tmp_widget = self.getCardsArea().itemAt(card).widget()
                 self.getCardsArea().removeWidget(tmp_widget)
@@ -140,23 +133,15 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
             for row in range(rows):
                 for col in range(columns):
                     index = columns * row + col
-                    card_info = CardInfo(
+                    card_info = self.CardInfo(
                         self, raw_cards_data[index], self.deck)
-                    contextMenu = QtWidgets.QMenu()
-                    contextMenu.addAction("Delete card").triggered.connect(
-                        delete_cards_data[raw_cards_data[index][1]])
-                    card_info._options.setMenu(contextMenu)
                     self.getCardsArea().addWidget(card_info, row, col)
             if remainder != 0:
                 new_row = rows
                 for i in range(remainder):
                     index = new_row * columns + i
-                    card_info = CardInfo(
+                    card_info = self.CardInfo(
                         self, raw_cards_data[index], self.deck)
-                    contextMenu = QtWidgets.QMenu()
-                    contextMenu.addAction("Delete card").triggered.connect(
-                        delete_cards_data[raw_cards_data[index][1]])
-                    card_info._options.setMenu(contextMenu)
                     self.getCardsArea().addWidget(card_info, new_row, i)
         else:
             for card in reversed(range(self.getCardsArea().count())):
@@ -164,10 +149,14 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
                 self.getCardsArea().removeWidget(tmp_widget)
                 tmp_widget.setParent(None)
                 tmp_widget.deleteLater()
-            self.getCardsArea().addWidget(self._add_card_icon, 0, 0)
-            self.getCardsArea().addWidget(self._add_card_label, 1, 0)
-            self._add_card_icon.show()
-            self._add_card_label.show()
+            add_card_icon = QtSvg.QSvgWidget(ADD_CARDS_ICON, self)
+            add_card_icon.setMaximumSize(200, 200)
+            add_card_label = QtWidgets.QLabel("Please add some cards", self)
+            add_card_label.setAlignment(QtCore.Qt.AlignCenter)
+            self.getCardsArea().addWidget(add_card_icon, 0, 0)
+            self.getCardsArea().addWidget(add_card_label, 1, 0)
+            # self._add_card_icon.show()
+            # self._add_card_label.show()
 
     def _addCard(self):
         self._showAddCard = AddCards(self, self.deck)
@@ -176,7 +165,7 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
     def resizeEvent(self, event):
         self._createCardsList()
 
-    def _deleteCard(self, card):
+    def _delete_card(self, card:str):
         print(card)
         db = io_.SQLiteInput(self.deck)
         out = io_.SQLiteOutput(self.deck)
@@ -216,36 +205,43 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
             menu.addAction("Refresh").triggered.connect(self._createCardsList)
             menu.popup(self.mapToGlobal(event.pos()))
 
+    class CardInfo(QtWidgets.QGroupBox, Ui__card_info):
+        def __init__(self, parent, card_info: tuple, deck):
+            super().__init__(parent)
+            self.parent_widget: NewCardsList = parent
+            self.card_info = card_info
+            self.deck = deck
+            self.setupUi(self)
+            shadow = QtWidgets.QGraphicsDropShadowEffect(
+                blurRadius=20, xOffset=0, yOffset=0)
+            shadow.setColor(QtGui.QColor(201, 199, 199))
+            self._front.setWordWrap(True)
+            self._back.setWordWrap(True)
+            self.setGraphicsEffect(shadow)
+            self._displayCardInfo()
+            self.setCursor(QtCore.Qt.PointingHandCursor)
+            self._options.setCursor(QtCore.Qt.PointingHandCursor)
+            contextMenu = QtWidgets.QMenu()
+            contextMenu.addAction("Delete card").triggered.connect(lambda: self.delete_card(self.card_info[1]))
+            self._options.setMenu(contextMenu)
 
-class CardInfo(QtWidgets.QGroupBox, Ui__card_info):
-    def __init__(self, parent, card_info: tuple, deck=None):
-        super().__init__(parent)
-        self.card_info = card_info
-        self.deck = deck
-        self.setupUi(self)
-        shadow = QtWidgets.QGraphicsDropShadowEffect(
-            blurRadius=20, xOffset=0, yOffset=0)
-        shadow.setColor(QtGui.QColor(201, 199, 199))
-        self._front.setWordWrap(True)
-        self._back.setWordWrap(True)
-        self.setGraphicsEffect(shadow)
-        self._displayCardInfo()
-        self.setCursor(QtCore.Qt.PointingHandCursor)
-        self._options.setCursor(QtCore.Qt.PointingHandCursor)
+        def _displayCardInfo(self):
+            _, front, back, img = self.card_info
+            self._front.setText(front)
+            self._back.setText(back)
+            pixmap = QtGui.QPixmap(img)
+            if not pixmap.isNull():
+                self._img.setPixmap(pixmap.scaledToWidth(300))
+            else:
+                self._img.setText("")
 
-    def _displayCardInfo(self):
-        _, front, back, img = self.card_info
-        self._front.setText(front)
-        self._back.setText(back)
-        pixmap = QtGui.QPixmap(img)
-        if not pixmap.isNull():
-            self._img.setPixmap(pixmap.scaledToWidth(300))
-        else:
-            self._img.setText("")
+        def edit_card(self):
+            self._edit_card = EditCard(self, self.deck, self._front.text())
+            self._displayCardInfo()
 
-    def editCard(self):
-        self._editCard = EditCard(self, self.deck, self._front.text())
-        self._displayCardInfo()
+        def mousePressEvent(self, event):
+            self.edit_card()
 
-    def mousePressEvent(self, event):
-        self.editCard()
+        def delete_card(self, card:str):
+            self.parent_widget._delete_card(card)
+

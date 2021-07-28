@@ -21,7 +21,6 @@ class SQLiteInput:
         self.conn = sql.connect(file_name)
         self.cursor = self.conn.cursor()
 
-
     def fetchDataFromDBDeck(self):
         try:
             self.cursor.execute("SELECT * FROM DECK")

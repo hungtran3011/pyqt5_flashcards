@@ -6,7 +6,7 @@ import io_
 class GameMode(QtWidgets.QWidget, Ui_game_mode):
     def __init__(self, parent, deck=None):
         super().__init__(parent)
-        self._deck = deck
+        self.deck = deck
         self.setupUi(self)
         self._right_answer = ""
         self.back_button.clicked.connect(self.back)
@@ -19,7 +19,7 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
     def set_deck(self, deck):
         self._deck = deck
         cards_list = io_.SQLiteInput(self.deck)
-        self.createQuestion(cards_list)
+        self.showQuestions(cards_list)
 
     def createQuestion(self, cards_list: dict, mode):
         if mode == "multiple":
@@ -28,6 +28,9 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
             pass
         else:
             pass
+
+    def showQuestion(self):
+        pass
 
     def writing_check(self):
         self.calculate_score()

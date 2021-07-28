@@ -29,17 +29,8 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         super().__init__()
         self.setupUi(self)
         self._add_deck.setCursor(QtCore.Qt.PointingHandCursor)
-        self._add_deck_icon = QtSvg.QSvgWidget(ADD_DECK_ICON)
-        self._add_deck_icon.mousePressEvent = self.showAddDeckPopup
-        self._add_deck_icon.setToolTip("Add a deck")
-        self._add_deck_icon.setCursor(QtCore.Qt.PointingHandCursor)
-        self._add_deck_icon.setMaximumSize(200, 200)
-        self._add_deck_label = QtWidgets.QLabel("Please add some decks")
-        self._add_deck_label.setAlignment(QtCore.Qt.AlignCenter)
         self._create_function_menu()
         # self.refresh = self.show_all_decks
-
-        
 
     def refresh(self):
         self.show_all_decks()
@@ -47,11 +38,12 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
     def getDecksArea(self):
         return self.gridLayout
 
-    def setNumberOfDecks(self):
+    def set_number_of_decks(self):
         DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
         DECKS_NUM = len(DECKS_LIST)
         text = f'{DECKS_NUM} deck' if DECKS_NUM == 1 else f'{DECKS_NUM} decks'
         self._number_of_decks.setText(text)
+        return DECKS_NUM
 
     def showAddDeckPopup(self, event=None):
         self._dialog_add_deck = AddDeck(self)
@@ -69,7 +61,23 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         menu = QtWidgets.QMenu(self)
         menu.addAction("Refresh").triggered.connect(self.show_all_decks)
         menu.popup(self.mapToGlobal(event.pos()))
-            
+    
+    def insert_icon(self):
+        _add_deck_icon = QtSvg.QSvgWidget(ADD_DECK_ICON, self)
+        _add_deck_icon.mousePressEvent = self.showAddDeckPopup
+        _add_deck_icon.setToolTip("Add a deck")
+        _add_deck_icon.setCursor(QtCore.Qt.PointingHandCursor)
+        _add_deck_icon.setMaximumSize(200, 200)
+        _add_deck_label = QtWidgets.QLabel("Please add some decks", self)
+        _add_deck_label.setAlignment(QtCore.Qt.AlignCenter)
+        for deck in reversed(range(self.getDecksArea().count())):
+            tmp_widget = self.getDecksArea().itemAt(deck).widget()
+            self.getDecksArea().removeWidget(tmp_widget)
+            tmp_widget.setParent(None)
+            tmp_widget.deleteLater()
+        self.set_number_of_decks()
+        self.getDecksArea().addWidget(_add_deck_icon, 0, 0)
+        self.getDecksArea().addWidget(_add_deck_label, 1, 0)   
 
 class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
     def __init__(self, parent, deck):
@@ -128,8 +136,9 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
             shutil.rmtree(img_folder_name)
         except FileNotFoundError:
             pass
-        finally:
-            self.close()
+        # finally:
+        #     self.close()
 
     def renameDeck(self):
         self._rename_window = RenameDeck(self, self.deck)
+

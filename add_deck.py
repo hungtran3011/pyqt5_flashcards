@@ -1,4 +1,5 @@
 import os
+import sqlite3 as sql
 import sys
 from pathlib import Path
 from platform import system 
@@ -67,10 +68,9 @@ class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
             restricted_char = ["<", ">", ":", "\"", "/", "\\", "|", "?", "*"]
             if len(file_name) == 0 or len(file_name) > 256:
                 return False
-            else:
-                for i in file_name:
-                    if i in restricted_char:
-                        return False
+            for i in file_name:
+                if i in restricted_char:
+                    return False
             return True
 
         name = self.deck_name_box.text()
@@ -107,7 +107,7 @@ class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
                          "DATE_"
                     )
                 self.close()
-            except:
+            except sql.OperationalError:
                 self._send_message("Error in importing file(s)")
         elif self.importing_radiobutton.isChecked() is True and self.file_obj[0] == "":
             self._send_message("The name of the imported file must not be blank")
