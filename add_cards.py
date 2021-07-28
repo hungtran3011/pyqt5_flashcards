@@ -4,6 +4,7 @@ from pathlib import Path
 from platform import system
 from datetime import date
 import shutil
+import sqlite3 as sql
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -38,14 +39,17 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
         out = io_.SQLiteOutput(self.deck)
         front = self.front_box.toPlainText()
         back = self.back_box.toPlainText()
-        try:
-            img_file = os.path.basename(self.img_file)
-        except:
-            pass
+        # try:
+        img_file = os.path.basename(self.img_file)
+        # except:
+        #     pass
         data_card = (index, front, back, f"{IMG_DIR}/{self.deck}/{img_file}")
         data_date = (index, front, None, date.today())
-        out.writeToDB(data_card, "DECK")
-        out.writeToDB(data_date, "DATE_")
+        try:
+            out.writeToDB(data_card, "DECK")
+            out.writeToDB(data_date, "DATE_")
+        except sql.IntegrityError:
+            self._sendMessage(f"Card '{front}' is already exist", "Card exist")
         if self.img_file != "":
             shutil.copyfile(self.img_file, f"{IMG_DIR}/{self.deck}/{img_file}")
         else:
@@ -59,3 +63,10 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
             self, "Select Image", default_dir)
         pixmap = QtGui.QPixmap(self.img_file)
         self.img.setPixmap(pixmap.scaledToHeight(200))
+
+    def _sendMessage(self, text, title=""):
+        message = QtWidgets.QMessageBox(self)
+        message.setWindowTitle(title)
+        message.setIcon(QtWidgets.QMessageBox.Warning)
+        message.setText(text)
+        message.exec()

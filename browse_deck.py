@@ -126,7 +126,7 @@ class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
             os.remove(file_name)
             img_folder_name = f"{IMG_DIR}/{self.getDeckName()}"
             shutil.rmtree(img_folder_name)
-        except:
+        except FileNotFoundError:
             pass
         finally:
             self.close()

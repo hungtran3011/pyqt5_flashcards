@@ -72,7 +72,7 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
             output = io_.SQLiteOutput(self.deck)
             output.updateTable("DECK", "IMG", tmp_link,
                                condition=f"FRONT='{self.word}'")
-        except :
+        except FileNotFoundError:
             pass
         finally:
             output = io_.SQLiteOutput(self.deck)

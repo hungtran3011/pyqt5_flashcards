@@ -159,6 +159,11 @@ class ModifiedNewCardsList(NewCardsList):
     def _back_home(self):
         window.setBrowseDecksMode()
 
+
+class Settings(QtWidgets.QWidget):
+    pass
+
+
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__() 
@@ -205,10 +210,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def resizeEvent(self, event: QtGui.QResizeEvent =None) -> None:
         print(self.height())
-
-
-class Settings(QtWidgets.QWidget):
-    pass
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
