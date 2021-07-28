@@ -27,7 +27,7 @@ class SQLiteInput:
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
-            return []
+            os.remove(f"{ROOT_DIR}/decks/{self.database}.db")
 
     def fetchDataFromDBDate_(self, condition:str=None):
         try:

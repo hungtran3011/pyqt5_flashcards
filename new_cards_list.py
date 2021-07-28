@@ -90,6 +90,11 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         super().__init__(parent)
         self.setupUi(self)
         self._add_card.clicked.connect(self._addCard)
+        self.deck = ""
+        self._add_card_label = QtWidgets.QLabel("Please add some cards")
+        self._add_card_label.setAlignment(QtCore.Qt.AlignCenter)
+        self._add_card_icon = QtSvg.QSvgWidget(ADD_CARDS_ICON)
+        self._add_card_icon.setMaximumSize(200, 200)
 
     def set_deck(self, deck):
         self.deck = deck
@@ -99,10 +104,6 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         self.cards_data_widgets = []
         self.setWindowTitle(f"Deck: {self.deck}")
         self.deck_label.setText(f"Cards list from deck: {self.deck}")
-        self._add_card_label = QtWidgets.QLabel("Please add some cards")
-        self._add_card_label.setAlignment(QtCore.Qt.AlignCenter)
-        self._add_card_icon = QtSvg.QSvgWidget(ADD_CARDS_ICON)
-        self._add_card_icon.setMaximumSize(200, 200)
         self._createCardsList()
 
     def getCardsArea(self):
