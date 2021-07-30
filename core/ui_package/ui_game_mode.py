@@ -369,7 +369,7 @@ class Ui_game_mode(object):
         self.gridLayout.addWidget(self.question_widget, 1, 1, 1, 1)
 
         self.retranslateUi(game_mode)
-        self.question_widget.setCurrentIndex(1)
+        self.question_widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(game_mode)
 
     def retranslateUi(self, game_mode):

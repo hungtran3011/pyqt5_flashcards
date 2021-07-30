@@ -5,16 +5,14 @@ from pathlib import Path
 
 from PyQt5 import QtWidgets, QtGui
 
-import io_
-from ui_package.ui_show_cards import Ui__show_cards
+import core.io_ as io_
+from core.ui_package.ui_show_cards import Ui__show_cards
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 )
-IMG_DIR = ROOT_DIR / "img"
-DECKS_DIR = ROOT_DIR / "decks"
-ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
-ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
+IMG_DIR = ROOT_DIR / "../img"
+DECKS_DIR = ROOT_DIR / "../decks"
 
 class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):

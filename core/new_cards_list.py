@@ -2,22 +2,21 @@ import os
 import sys
 import shutil
 from pathlib import Path
-import functools
 
 
 from PyQt5 import QtGui, QtWidgets, QtCore, QtSvg
-from ui_package.ui_new_cards_list import Ui__new_cards_list
-from ui_package.ui_edit_card import Ui__edit_card
-from ui_package.ui_card_info import Ui__card_info
+from core.ui_package.ui_new_cards_list import Ui__new_cards_list
+from core.ui_package.ui_edit_card import Ui__edit_card
+from core.ui_package.ui_card_info import Ui__card_info
 
-import io_
-from add_cards import AddCards
+import core.io_ as io_
+from core.add_cards import AddCards
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 )
-IMG_DIR = ROOT_DIR / "img"
-DECKS_DIR = ROOT_DIR / "decks"
+IMG_DIR = ROOT_DIR / "../img"
+DECKS_DIR = ROOT_DIR / "../decks"
 
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
@@ -83,7 +82,7 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
 
 # The new cards list classes
 # with new fresh ui
-# with customized and editable groupboxes (look like cards) for information:
+# and customized and editable groupboxes (look like cards) for information:
 # front, back, image
 
 

@@ -1,7 +1,7 @@
 from PyQt5 import QtGui, QtCore, QtWidgets
 
-from ui_package.ui_game_mode import Ui_game_mode
-import io_
+from core.ui_package.ui_game_mode import Ui_game_mode
+import core.io_ as io_
 
 class GameMode(QtWidgets.QWidget, Ui_game_mode):
     def __init__(self, parent, deck=None):

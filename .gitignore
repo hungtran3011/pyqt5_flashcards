@@ -4,3 +4,4 @@ ui
 ui_package/ui_cards_list.py
 workspace.code-workspace
 venv
+.pylintrc

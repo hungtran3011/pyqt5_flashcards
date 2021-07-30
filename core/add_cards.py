@@ -8,17 +8,15 @@ import sqlite3 as sql
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-import io_
-from ui_package.ui_add_card import Ui_add_card
+import core.io_ as io_
+from core.ui_package.ui_add_card import Ui_add_card
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 )
 SYSTEM = system()
-IMG_DIR = ROOT_DIR / "img"
-DECKS_DIR = ROOT_DIR / "decks"
-ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
-ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
+IMG_DIR = ROOT_DIR / "../img"
+DECKS_DIR = ROOT_DIR / "../decks"
 
 class AddCards(QtWidgets.QDialog, Ui_add_card):
     def __init__(self, parent, deck):

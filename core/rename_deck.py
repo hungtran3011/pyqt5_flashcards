@@ -5,14 +5,14 @@ from platform import system
 
 from PyQt5 import QtWidgets
 
-from ui_package.ui_rename_deck import Ui__rename_deck
+from core.ui_package.ui_rename_deck import Ui__rename_deck
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 )
 SYSTEM = system()
-IMG_DIR = ROOT_DIR / "img"
-DECKS_DIR = ROOT_DIR / "decks"
+IMG_DIR = ROOT_DIR / "../img"
+DECKS_DIR = ROOT_DIR / "../decks"
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 

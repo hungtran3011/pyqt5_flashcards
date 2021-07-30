@@ -17,7 +17,7 @@ class SQLiteInput:
     def __init__(self, database):
         # Sometimes can be treated as the deck's name
         self.database = database
-        file_name = f"{ROOT_DIR}/decks/{self.database}.db"
+        file_name = f"{ROOT_DIR}/../decks/{self.database}.db"
         self.conn = sql.connect(file_name)
         self.cursor = self.conn.cursor()
 
@@ -27,7 +27,7 @@ class SQLiteInput:
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
-            os.remove(f"{ROOT_DIR}/decks/{self.database}.db")
+            os.remove(f"{ROOT_DIR}/../decks/{self.database}.db")
             raise Error("Table DECK not found")
 
     def fetchDataFromDBDate_(self, condition:str=None):
@@ -39,7 +39,7 @@ class SQLiteInput:
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
-            os.remove(f"{ROOT_DIR}/decks/{self.database}.db")
+            os.remove(f"{ROOT_DIR}/../decks/{self.database}.db")
 
     def getImgFile(self):
         try:
@@ -56,7 +56,7 @@ class SQLiteInput:
 class SQLiteOutput:
     def __init__(self, database: str):
         self.database = database
-        self.conn = sql.connect(f"{ROOT_DIR}/decks/{self.database}.db")
+        self.conn = sql.connect(f"{ROOT_DIR}/../decks/{self.database}.db")
         self.cursor = self.conn.cursor()
 
     def writeToDB(self, data, table) -> None:
