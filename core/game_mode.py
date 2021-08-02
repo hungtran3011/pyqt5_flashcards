@@ -370,10 +370,10 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
                 next_review += timedelta(days=5)
             elif status["writing"] or status["multiple choice"]:
                 print(f"{card}: 1/2")
-                next_review += timedelta(days=2)
+                next_review += timedelta(days=1)
             else:
                 print(f"{card}: 0/2")
-                next_review += timedelta(days=1)
+                next_review += timedelta(days=0)
             exporter.updateTable(
                 table="DATE_", column_to_change="LAST_REVIEW",
                 data=last_review, condition=card
