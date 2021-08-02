@@ -17,6 +17,9 @@ ROOT_DIR = Path(
 SYSTEM = system()
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
+if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR))):
+    IMG_DIR = ROOT_DIR / "img"
+    DECKS_DIR = ROOT_DIR / "decks"
 
 class AddCards(QtWidgets.QDialog, Ui_add_card):
     def __init__(self, parent, deck):
@@ -32,9 +35,9 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
         self.exec_()
 
     def _saveSingleCard(self):
-        inp = io_.SQLiteInput(self.deck)
-        index = len(inp.fetchDataFromDBDeck()) + 1
-        out = io_.SQLiteOutput(self.deck)
+        inp = io_.SQLiteImporter(self.deck)
+        index = len(inp.fetch_from_db_Deck()) + 1
+        out = io_.SQLiteExporter(self.deck)
         front = self.front_box.toPlainText()
         back = self.back_box.toPlainText()
         # try:

@@ -3,7 +3,7 @@ import os
 import random as rand
 from pathlib import Path
 
-from PyQt5 import QtWidgets, QtGui
+from PyQt5 import QtCore, QtWidgets, QtGui, QtMultimedia
 
 import core.io_ as io_
 from core.ui_package.ui_show_cards import Ui__show_cards
@@ -13,6 +13,12 @@ ROOT_DIR = Path(
 )
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
+AUDIO_DIR = ROOT_DIR / "audio"
+if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR)
+        and os.path.isdir(str(AUDIO_DIR)))):
+    IMG_DIR = ROOT_DIR / "img"
+    DECKS_DIR = ROOT_DIR / "decks"
+    AUDIO_DIR = ROOT_DIR / "audio" 
 
 class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
@@ -22,6 +28,9 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
         self._next.clicked.connect(self._nextCard)
         self._previous.clicked.connect(self._prevCard)
         self._shuffle.clicked.connect(self._shuffleCards)
+        self.flip_audio = QtMultimedia.QMediaPlayer()
+        flip_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/flip.mp3")
+        self.flip_audio.setMedia(QtMultimedia.QMediaContent(flip_audio_link))
         # self._practice.clicked.connect(self._practiceDeck)
         self._refresh.clicked.connect(self._refreshCards)
 
@@ -31,9 +40,9 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
         shadow = QtWidgets.QGraphicsDropShadowEffect(
             blurRadius=30, xOffset=0, yOffset=0)
         shadow.setColor(QtGui.QColor(211, 211, 211))
-        self._card_img.setGraphicsEffect(shadow)
-        self._card_img.mousePressEvent = self._flipAnimationClicked
-        self._card_img.mouseReleaseEvent = self._flipAnimationReleased
+        self._card_with_img.setGraphicsEffect(shadow)
+        self._card_with_img.mousePressEvent = self._flipAnimationClicked
+        self._card_with_img.mouseReleaseEvent = self._flipAnimationReleased
         self._card.setWordWrap(True)
         self.cards_list = self._createCardsLists()
         self.front_list = list(self.cards_list)
@@ -47,8 +56,8 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
         # self.exec_()
 
     def _createCardsLists(self):
-        inp = io_.SQLiteInput(self.deck)
-        raw_deck = inp.fetchDataFromDBDeck()
+        inp = io_.SQLiteImporter(self.deck)
+        raw_deck = inp.fetch_from_db_Deck()
         decks_list = {}
         for i in raw_deck:
             decks_list[i[1]] = [i[2], i[3]]
@@ -102,6 +111,7 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
             self._practice.setEnabled(False)
 
     def _flipCard(self, event=None):
+        self.flip_audio.play()
         self._face = 1 if self._face == 0 else 0
         self._displayCard()
 
@@ -140,13 +150,13 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
         shadow = QtWidgets.QGraphicsDropShadowEffect(
             blurRadius=5, xOffset=0, yOffset=0)
         shadow.setColor(QtGui.QColor(211, 211, 211))
-        self._card_img.setGraphicsEffect(shadow)
+        self._card_with_img.setGraphicsEffect(shadow)
 
     def _flipAnimationReleased(self, event):
         shadow = QtWidgets.QGraphicsDropShadowEffect(
             blurRadius=30, xOffset=0, yOffset=0)
         shadow.setColor(QtGui.QColor(211, 211, 211))
-        self._card_img.setGraphicsEffect(shadow)
+        self._card_with_img.setGraphicsEffect(shadow)
 
     def set_deck(self, deck_name):
         self.deck = deck_name

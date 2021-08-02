@@ -14,6 +14,7 @@ from core.ui_package.ui_deck_info import Ui__deck_info
 
 from core.add_deck import AddDeck
 from core.rename_deck import RenameDeck
+# from core.settings import Settings
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -21,6 +22,10 @@ ROOT_DIR = Path(
 SYSTEM = system()
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
+# To handle exceptions when running executable file
+if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR))):
+    IMG_DIR = ROOT_DIR / "img"
+    DECKS_DIR = ROOT_DIR / "decks"
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
@@ -81,12 +86,6 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
     def showAddDeckPopup(self, event=None):
         self._dialog_add_deck = AddDeck(self)
 
-    def _create_function_menu(self):
-        function_menu = QtWidgets.QMenu(self._more_funcs)
-        settings = function_menu.addAction("Settings...")
-        settings.triggered.connect(self.showAddDeckPopup)
-        self._more_funcs.setMenu(function_menu)
-
     def keyPressEvent(self, event=QtCore.Qt.Key_F5):
         self.show_all_decks()
 
@@ -133,9 +132,9 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
 
         def _evaluateNumOfCards(self):
             deck_name = self.getDeckName()
-            inp = io_.SQLiteInput(deck_name)
+            inp = io_.SQLiteImporter(deck_name)
             try:
-                number = len(inp.fetchDataFromDBDeck())
+                number = len(inp.fetch_from_db_Deck())
             except shutil.Error:
                 number = 0
             text = f'{number} card' if number == 1 else f'{number} cards'
@@ -143,8 +142,8 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
 
         def _evaluateNumOfCardsToReview(self):
             deck_name = self.getDeckName()
-            inp = io_.SQLiteInput(deck_name)
-            dates = inp.fetchDataFromDBDate_()
+            inp = io_.SQLiteImporter(deck_name)
+            dates = inp.fetch_from_db_Date_()
             number = 0
             for rows in dates:
                 if datetime.today() >= datetime.strptime(rows[3], "%Y-%m-%d"):

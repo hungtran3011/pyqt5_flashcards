@@ -6,7 +6,7 @@ import os
 from platform import system
 from pathlib import Path
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtGui, QtWidgets, QtCore
 
 from core.browse_deck import BrowseDeck
 from core.flashcards_mode import FlashcardsMode
@@ -14,6 +14,7 @@ from core.game_mode import GameMode
 from core.new_cards_list import NewCardsList
 from core.add_deck import AddDeck
 from core.settings import Settings
+from core.export_deck import ExportDeck
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -33,6 +34,7 @@ ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super().__init__()
+        # self.setStyleSheet("background: white")
         self.setMinimumSize(600, 536)
         self.setWindowTitle("All decks")
         self.setWindowIcon(QtGui.QIcon(str(IMG_DIR) + "/flash.ico"))
@@ -43,6 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._flash_mode_widget = self.ModifiedFlashcardsMode(self)
         self._stacked_widget.addWidget(self._flash_mode_widget)
         self._game_mode_widget = self.ModifiedGameMode(self)
+        # self._game_mode_widget.setStyleSheet("""QMainWindow{background: none}""")
         self._stacked_widget.addWidget(self._game_mode_widget)
         self._new_cards_list = self.ModifiedNewCardsList(self)
         self._stacked_widget.addWidget(self._new_cards_list)
@@ -66,8 +69,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_game_mode(self, deck):
         self._stacked_widget.setCurrentWidget(self._game_mode_widget)
-        self._game_mode_widget.set_deck(deck)
-        self.setWindowTitle(f"Practice mode/ Game mode for deck: {deck}")
+        try:
+            self._game_mode_widget.set_deck(deck)
+            self.setWindowTitle(f"Practice mode/ Game mode for deck: {deck}")
+        except ValueError:
+            self.set_new_cards_list(deck)
 
     def set_new_cards_list(self, deck):
         self._stacked_widget.setCurrentWidget(self._new_cards_list)
@@ -128,8 +134,9 @@ class MainWindow(QtWidgets.QMainWindow):
             self.show_all_decks()
 
         def show_add_deck_popup(self, event=None):
-            self._dialog_add_deck = self.main_window_widget.ModifiedAddDeck(self)
-            window.set_browse_decks_mode()
+            # self._dialog_add_deck = self.main_window_widget.ModifiedAddDeck(self)
+            self._dialog_add_deck = AddDeck(self)
+            self.show_all_decks()
 
         def show_flashcards_mode(self, deck):
             self.main_window_widget.set_flashcards_mode(deck)
@@ -150,17 +157,79 @@ class MainWindow(QtWidgets.QMainWindow):
                 pass
             self.show_all_decks()
 
+        def _create_function_menu(self):
+            function_menu = QtWidgets.QMenu(self._more_funcs)
+            function_menu.setStyleSheet(
+                """
+                QMenu {
+                            background: white;
+                            border-radius: 5px;
+                            padding: 4px;
+                            border: 1px solid #d3d3d3
+                        }
+
+                        QMenu::item {
+                            /* sets background of menu item. set this to something non-transparent
+                                if you want menu color and menu item color to be different */
+                            background-color: white;
+                            border-radius: 5px;
+                            padding: 4px;
+                        }
+
+                        QMenu::item:selected { /* when user selects item using mouse or keyboard */
+                            background-color: #91e67b;
+                            color: white;\n
+                        }
+                """
+            )
+            settings = function_menu.addAction("Settings...")
+            settings.triggered.connect(self.show_settings)
+            self._more_funcs.setMenu(function_menu)
+        
+        def show_settings(self):
+            settings_dialog = self.main_window_widget.ModifiedSettings(self)
+            settings_dialog.exec()
+
         class ModifiedDeckInfo(BrowseDeck.DeckInfo):
             def __init__(self, parent, deck, *args, **kwargs):
                 super().__init__(parent, deck)
                 self.parent_widget: MainWindow.ModifiedBrowseDeck = parent
+                self.deck = deck
                 self._game_mode.clicked.connect(self.show_game_mode)
                 self._view_cards_list.clicked.connect(self.show_view_cards_mode)
                 self._flash_mode.clicked.connect(self.show_flashcards_mode)
-                self._contextMenu = QtWidgets.QMenu()
-                self._contextMenu.addAction("Delete deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
-                self._contextMenu.addAction("Rename deck").triggered.connect(self.renameDeck)
-                self._more_funcs.setMenu(self._contextMenu)
+                self.contextMenu = QtWidgets.QMenu()
+                self.contextMenu.setWindowFlags(self.contextMenu.windowFlags() | QtCore.Qt.FramelessWindowHint)
+                self.contextMenu.setStyleSheet(
+                """
+                    QMenu {
+                        background: white;
+                        border-radius: 5px;
+                        padding: 4px;
+                        border: 1px solid #d3d3d3;
+                        margin: 0;
+                    }
+
+                    QMenu::item {
+                        /* sets background of menu item. set this to something non-transparent
+                            if you want menu color and menu item color to be different */
+                        background-color: none;
+                        border-radius: 5px;
+                        padding: 4px;
+                    }
+
+                    QMenu::item:selected { /* when user selects item using mouse or keyboard */
+                        background-color: #91e67b;
+                        color: white;\n
+                    }
+                """
+                )
+                # self._more_funcs.clicked.connect(self.show_context_menu)
+                self.contextMenu.addAction("Delete deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
+                self.contextMenu.addAction("Rename deck").triggered.connect(self.renameDeck)
+                self.contextMenu.addAction("Export cards").triggered.connect(self.export_deck)
+                self._more_funcs.setMenu(self.contextMenu)
+                self._more_funcs.setPopupMode(QtWidgets.QToolButton.InstantPopup)
 
             def show_flashcards_mode(self):
                 self.parent_widget.show_flashcards_mode(self.deck)
@@ -180,16 +249,17 @@ class MainWindow(QtWidgets.QMainWindow):
             def rename_deck(self):
                 self.renameDeck()
                 self.parent_widget.show_all_decks()
-        
-    class ModifiedAddDeck(AddDeck):
-        def __init__(self, parent, *args, **kwargs):
-            super().__init__(parent)
-            self.main_window_widget = parent
-            self.save_button.clicked.connect(self.modified_save)
 
-        def modified_save(self):
-            self.save()
-            self.parent.set_browse_decks_mode()
+            def export_deck(self):
+                export_dialog = ExportDeck(self.parent_widget, self.deck)
+                export_dialog.exec()
+
+            # def show_context_menu(self):
+            #     self.contextMenu.addAction("Delete deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
+            #     self.contextMenu.addAction("Rename deck").triggered.connect(self.renameDeck)
+            #     self.contextMenu.addAction("Export cards").triggered.connect(self.export_deck)
+            #     self._more_funcs.setMenu(self.contextMenu)
+            #     self._more_funcs.setPopupMode(QtWidgets.QToolButton.InstantPopup)        
 
     class ModifiedNewCardsList(NewCardsList):
         def __init__(self, parent, *args, **kwargs):
@@ -205,8 +275,22 @@ class MainWindow(QtWidgets.QMainWindow):
             super().__init__(parent)
             self.main_window_widget: MainWindow = parent
             self.back_button.clicked.connect(self.back)
+            self.next_question_button.clicked.connect(self.next_question)
 
         def back(self):
+            self.main_window_widget.set_browse_decks_mode()
+
+        def next_question(self):
+            if self.question_num < len(self.questions_list) - 1:
+                self.question_num += 1
+                self.show_game_progress(int((self.question_num) / len(self.questions_list) * 100))
+                self.show_questions(self.question_num)
+            else:
+                self.show_game_progress(int((self.question_num) / len(self.questions_list) * 100))
+                self.end_test()
+
+        def end_test(self):
+            super().end_test()
             self.main_window_widget.set_browse_decks_mode()
 
     class ModifiedFlashcardsMode(FlashcardsMode):
@@ -216,6 +300,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def modified_configure_widgets(self):
             self._back.clicked.connect(self.main_window_widget.set_browse_decks_mode)
+            self._practice.clicked.connect(self._practice_deck)
             self.configureWidgets()
 
         def modified_set_deck(self, deck, event=None):

@@ -196,36 +196,27 @@ class Ui_game_mode(object):
         self.game_progress.setObjectName("game_progress")
         self.horizontalLayout_2.addWidget(self.game_progress)
         self.gridLayout.addWidget(self.header_frame, 0, 1, 1, 1)
-        self.question_widget = QtWidgets.QStackedWidget(game_mode)
-        self.question_widget.setStyleSheet("QPushButton{\n"
-"    background: #d3d3d3;\n"
-"    border-radius: 5px;\n"
-"    padding: 20px 5px;\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"    background: rgb(157, 157, 157);\n"
-"    color: white;\n"
-"}")
-        self.question_widget.setObjectName("question_widget")
-        self.box_filling = QtWidgets.QWidget()
-        self.box_filling.setObjectName("box_filling")
-        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.box_filling)
-        self.verticalLayout_2.setObjectName("verticalLayout_2")
-        self.typing_label = QtWidgets.QLabel(self.box_filling)
+        self.game_frame = QtWidgets.QFrame(game_mode)
+        self.game_frame.setStyleSheet("border-radius: 5px;")
+        self.game_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.game_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.game_frame.setObjectName("game_frame")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.game_frame)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.question_type_label = QtWidgets.QLabel(self.game_frame)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.typing_label.sizePolicy().hasHeightForWidth())
-        self.typing_label.setSizePolicy(sizePolicy)
+        sizePolicy.setHeightForWidth(self.question_type_label.sizePolicy().hasHeightForWidth())
+        self.question_type_label.setSizePolicy(sizePolicy)
         font = QtGui.QFont()
         font.setPointSize(20)
-        self.typing_label.setFont(font)
-        self.typing_label.setStyleSheet("color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );")
-        self.typing_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.typing_label.setObjectName("typing_label")
-        self.verticalLayout_2.addWidget(self.typing_label)
-        self.question_frame = QtWidgets.QFrame(self.box_filling)
+        self.question_type_label.setFont(font)
+        self.question_type_label.setStyleSheet("color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );")
+        self.question_type_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.question_type_label.setObjectName("question_type_label")
+        self.verticalLayout_5.addWidget(self.question_type_label)
+        self.question_frame = QtWidgets.QFrame(self.game_frame)
         self.question_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.question_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.question_frame.setObjectName("question_frame")
@@ -251,14 +242,47 @@ class Ui_game_mode(object):
         self.question_label.setOpenExternalLinks(False)
         self.question_label.setObjectName("question_label")
         self.horizontalLayout.addWidget(self.question_label)
-        self.verticalLayout_2.addWidget(self.question_frame)
-        self.answer_box = QtWidgets.QTextEdit(self.box_filling)
+        self.next_question_button = QtWidgets.QPushButton(self.question_frame)
+        self.next_question_button.setEnabled(False)
+        self.next_question_button.setMaximumSize(QtCore.QSize(150, 16777215))
+        self.next_question_button.setStyleSheet("QPushButton{\n"
+"    background: #d3d3d3;\n"
+"    padding: 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background: rgb(157, 157, 157);\n"
+"    color: white;\n"
+"}")
+        self.next_question_button.setObjectName("next_question_button")
+        self.horizontalLayout.addWidget(self.next_question_button)
+        self.verticalLayout_5.addWidget(self.question_frame)
+        self.question_widget = QtWidgets.QStackedWidget(self.game_frame)
+        self.question_widget.setStyleSheet("QPushButton{\n"
+"    background: #d3d3d3;\n"
+"    border-radius: 5px;\n"
+"    padding: 20px 5px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background: rgb(157, 157, 157);\n"
+"    color: white;\n"
+"}")
+        self.question_widget.setObjectName("question_widget")
+        self.writing_widget = QtWidgets.QWidget()
+        self.writing_widget.setObjectName("writing_widget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.writing_widget)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.answer_box = QtWidgets.QTextEdit(self.writing_widget)
         self.answer_box.setStyleSheet("background-color: #d3d3d3;\n"
 "padding: 5px;\n"
 "border-radius: 5px;")
         self.answer_box.setObjectName("answer_box")
+        font = QtGui.QFont()
+        font.setPointSize(18)
+        self.answer_box.setFont(font)
         self.verticalLayout_2.addWidget(self.answer_box)
-        self.submit_frame = QtWidgets.QFrame(self.box_filling)
+        self.submit_frame = QtWidgets.QFrame(self.writing_widget)
         self.submit_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.submit_frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.submit_frame.setObjectName("submit_frame")
@@ -272,6 +296,9 @@ class Ui_game_mode(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.submit.sizePolicy().hasHeightForWidth())
         self.submit.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.submit.setFont(font)
         self.submit.setStyleSheet("QPushButton{\n"
 "    background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );\n"
 "    color: white;\n"
@@ -291,52 +318,12 @@ class Ui_game_mode(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_3.addItem(spacerItem1)
         self.verticalLayout_2.addWidget(self.submit_frame)
-        self.question_widget.addWidget(self.box_filling)
-        self.multiple = QtWidgets.QWidget()
-        self.multiple.setObjectName("multiple")
-        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.multiple)
+        self.question_widget.addWidget(self.writing_widget)
+        self.multiple_widget = QtWidgets.QWidget()
+        self.multiple_widget.setObjectName("multiple_widget")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.multiple_widget)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
-        self.typing_label_2 = QtWidgets.QLabel(self.multiple)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.typing_label_2.sizePolicy().hasHeightForWidth())
-        self.typing_label_2.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(20)
-        self.typing_label_2.setFont(font)
-        self.typing_label_2.setStyleSheet("color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );")
-        self.typing_label_2.setAlignment(QtCore.Qt.AlignCenter)
-        self.typing_label_2.setObjectName("typing_label_2")
-        self.verticalLayout_3.addWidget(self.typing_label_2)
-        self.question_frame_2 = QtWidgets.QFrame(self.multiple)
-        self.question_frame_2.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.question_frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.question_frame_2.setObjectName("question_frame_2")
-        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.question_frame_2)
-        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.question_img_2 = QtWidgets.QLabel(self.question_frame_2)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.question_img_2.sizePolicy().hasHeightForWidth())
-        self.question_img_2.setSizePolicy(sizePolicy)
-        self.question_img_2.setMaximumSize(QtCore.QSize(200, 100))
-        self.question_img_2.setText("")
-        self.question_img_2.setPixmap(QtGui.QPixmap("ui/../../../Downloads/dien-bien-bat-ngo-khi-ta-ga-trong-f5f141.jpg"))
-        self.question_img_2.setScaledContents(True)
-        self.question_img_2.setObjectName("question_img_2")
-        self.horizontalLayout_4.addWidget(self.question_img_2)
-        self.question_label_2 = QtWidgets.QLabel(self.question_frame_2)
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        self.question_label_2.setFont(font)
-        self.question_label_2.setWordWrap(True)
-        self.question_label_2.setOpenExternalLinks(False)
-        self.question_label_2.setObjectName("question_label_2")
-        self.horizontalLayout_4.addWidget(self.question_label_2)
-        self.verticalLayout_3.addWidget(self.question_frame_2)
-        self.answer_frame = QtWidgets.QFrame(self.multiple)
+        self.answer_frame = QtWidgets.QFrame(self.multiple_widget)
         self.answer_frame.setStyleSheet("QPushButton{\n"
 "    background: #d3d3d3;\n"
 "}\n"
@@ -365,11 +352,20 @@ class Ui_game_mode(object):
         self.button_C.setObjectName("button_C")
         self.gridLayout_2.addWidget(self.button_C, 1, 0, 1, 1)
         self.verticalLayout_3.addWidget(self.answer_frame)
-        self.question_widget.addWidget(self.multiple)
-        self.gridLayout.addWidget(self.question_widget, 1, 1, 1, 1)
+        self.question_widget.addWidget(self.multiple_widget)
+        self.verticalLayout_5.addWidget(self.question_widget)
+        self.true_answer_label = QtWidgets.QLabel(self.game_frame)
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.true_answer_label.setFont(font)
+        self.true_answer_label.setStyleSheet("color: #91e67b")
+        self.true_answer_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.true_answer_label.setObjectName("true_answer_label")
+        self.verticalLayout_5.addWidget(self.true_answer_label)
+        self.gridLayout.addWidget(self.game_frame, 1, 1, 1, 1)
 
         self.retranslateUi(game_mode)
-        self.question_widget.setCurrentIndex(0)
+        self.question_widget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(game_mode)
 
     def retranslateUi(self, game_mode):
@@ -379,12 +375,12 @@ class Ui_game_mode(object):
         self.score.setText(_translate("game_mode", "0"))
         self.revise_label.setText(_translate("game_mode", "Revised"))
         self.back_button.setText(_translate("game_mode", "Back"))
-        self.typing_label.setText(_translate("game_mode", "Type the right answer"))
+        self.question_type_label.setText(_translate("game_mode", "Type the right answer"))
         self.question_label.setText(_translate("game_mode", "Question"))
+        self.next_question_button.setText(_translate("game_mode", "Next question"))
         self.submit.setText(_translate("game_mode", "Submit"))
-        self.typing_label_2.setText(_translate("game_mode", "Choose the right answer"))
-        self.question_label_2.setText(_translate("game_mode", "Question"))
         self.button_D.setText(_translate("game_mode", "D. PushButton"))
         self.button_A.setText(_translate("game_mode", "A. PushButton"))
         self.button_B.setText(_translate("game_mode", "B. PushButton"))
         self.button_C.setText(_translate("game_mode", "C. PushButton"))
+        self.true_answer_label.setText(_translate("game_mode", "TextLabel"))

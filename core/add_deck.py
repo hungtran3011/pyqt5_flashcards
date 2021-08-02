@@ -17,6 +17,9 @@ ROOT_DIR = Path(
 SYSTEM = system()
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
+if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR))):
+    IMG_DIR = ROOT_DIR / "img"
+    DECKS_DIR = ROOT_DIR / "decks"
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
@@ -83,7 +86,7 @@ class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
             if os.path.basename(file_name) not in file_list:
                 if isValidFileName(name):
                     open(file_name, "a+").close()
-                    out = io_.SQLiteOutput(name)
+                    out = io_.SQLiteExporter(name)
                     out.createTable("DECK")
                     out.createTable("DATE_")
                     os.chdir(f"{IMG_DIR}")
@@ -99,7 +102,7 @@ class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
         if self.importing_radiobutton.isChecked() is True and self.file_obj[0] != "":
             try:
                 open(file_name, "a+").close()
-                output = io_.SQLiteOutput(name)
+                output = io_.SQLiteExporter(name)
                 for card in self.parsed_data:
                     output.writeToDB(card, "DECK")
                     output.writeToDB(

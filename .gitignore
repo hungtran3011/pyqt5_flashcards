@@ -5,3 +5,11 @@ ui_package/ui_cards_list.py
 workspace.code-workspace
 venv
 .pylintrc
+abc
+dist
+build
+flashcards.spec
+.vscode
+question_list.txt
+chinese vocab
+english vocab

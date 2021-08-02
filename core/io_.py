@@ -13,24 +13,26 @@ from io import BytesIO
 
 ROOT_DIR = Path(getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__))))
 
-class SQLiteInput:
+class SQLiteImporter:
     def __init__(self, database):
         # Sometimes can be treated as the deck's name
         self.database = database
-        file_name = f"{ROOT_DIR}/../decks/{self.database}.db"
-        self.conn = sql.connect(file_name)
+        self.file_name = f"{ROOT_DIR}/../decks/{self.database}.db"
+        if not os.path.exists(self.file_name):
+            self.file_name = f"{ROOT_DIR}/decks/{self.database}.db"
+        self.conn = sql.connect(self.file_name)
         self.cursor = self.conn.cursor()
 
-    def fetchDataFromDBDeck(self):
+    def fetch_from_db_Deck(self):
         try:
             self.cursor.execute("SELECT * FROM DECK")
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
-            os.remove(f"{ROOT_DIR}/../decks/{self.database}.db")
+            os.remove(f"{self.file_name}")
             raise Error("Table DECK not found")
 
-    def fetchDataFromDBDate_(self, condition:str=None):
+    def fetch_from_db_Date_(self, condition:str=None):
         try:
             if condition is None:
                 self.cursor.execute("SELECT * FROM DATE_")
@@ -39,11 +41,11 @@ class SQLiteInput:
             result = self.cursor.fetchall()
             return result
         except sql.OperationalError:
-            os.remove(f"{ROOT_DIR}/../decks/{self.database}.db")
+            os.remove(f"{self.file_name}")
 
     def getImgFile(self):
         try:
-            tmp_list = self.fetchDataFromDBDeck()
+            tmp_list = self.fetch_from_db_Deck()
             return tmp_list[3]
         except sql.OperationalError:
             return []
@@ -53,10 +55,13 @@ class SQLiteInput:
         return self.cursor.fetchall()
 
 
-class SQLiteOutput:
+class SQLiteExporter:
     def __init__(self, database: str):
         self.database = database
-        self.conn = sql.connect(f"{ROOT_DIR}/../decks/{self.database}.db")
+        self.file_name = f"{ROOT_DIR}/../decks/{self.database}.db"
+        if not os.path.exists(self.file_name):
+            self.file_name = f"{ROOT_DIR}/decks/{self.database}.db"
+        self.conn = sql.connect(self.file_name)
         self.cursor = self.conn.cursor()
 
     def writeToDB(self, data, table) -> None:
@@ -76,10 +81,27 @@ class SQLiteOutput:
             self.conn.commit()
 
     def updateTable(self, table:str, column_to_change:str, data:str, condition:str):
-        # The 'condition' argument requires a SQLite condition
-        # E.g: FRONT = "text", ID > 1, etc.
-        self.cursor.execute("UPDATE ? SET ? = ? WHERE ?", (table, column_to_change, data, condition))
-        self.conn.commit()
+        print(table, column_to_change, data, condition)
+        if table == "DECK":
+            if column_to_change == "BACK":
+                self.cursor.execute("UPDATE DECK SET BACK = ? WHERE FRONT = ?", (data, condition))
+                self.conn.commit()
+            elif column_to_change == "IMG":
+                self.cursor.execute("UPDATE DECK SET IMG = ? WHERE FRONT = ?", (data, condition))
+                self.conn.commit()
+            else:
+                raise ValueError
+        elif table == "DATE_":
+            if column_to_change == "LAST_REVIEW":
+                self.cursor.execute("UPDATE DATE_ SET LAST_REVIEW = ? WHERE CARD = ?", (data, condition))
+                self.conn.commit()
+            elif column_to_change == "NEXT_REVIEW":
+                self.cursor.execute("UPDATE DATE_ SET NEXT_REVIEW = ? WHERE CARD = ?", (data, condition))
+                self.conn.commit()
+            else:
+                raise ValueError
+        else:
+            raise ValueError("Table not existed")
 
     def deleteItem(self, table: str, item: str, ):
         pass

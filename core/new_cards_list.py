@@ -15,19 +15,24 @@ from core.add_cards import AddCards
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 )
+
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
+
+if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR))):
+    IMG_DIR = ROOT_DIR / "img"
+    DECKS_DIR = ROOT_DIR / "decks"
 
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
 
 class EditCard(QtWidgets.QDialog, Ui__edit_card):
-    def __init__(self, parent, deck, word):
+    def __init__(self, parent, deck, front):
         super().__init__(parent)
         self.deck = deck
-        self.word = word
+        self.front = front
         self.setupUi(self)
-        self.setWindowTitle(f"Edit card: {self.word}")
+        self.setWindowTitle(f"Edit card: {self.front}")
         self._save_button.clicked.connect(self._save)
         self._img_button.clicked.connect(self._chooseImage)
         self._cancel_button.clicked.connect(self.close)
@@ -35,9 +40,9 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
         self.exec_()
 
     def __insertInfo(self):
-        inp = io_.SQLiteInput(self.deck)
-        print(inp.selectFromDBDeck(self.word))
-        self.card_info = inp.selectFromDBDeck(self.word)[0]
+        inp = io_.SQLiteImporter(self.deck)
+        print(inp.selectFromDBDeck(self.front))
+        self.card_info = inp.selectFromDBDeck(self.front)[0]
         _, self.front_text, self.back_text, self.img_link = self.card_info
         self._img_file = ""
         self._front.setText(self.front_text)
@@ -59,7 +64,9 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
     def _save(self):
         try:
             img_file = os.path.basename(self._img_file)
-            tmp_link = f"{IMG_DIR}/{self.deck}/{img_file}"
+            _, extension = os.path.splitext(img_file)
+            new_file_name = f"{self.front}{extension}"
+            tmp_link = f"{IMG_DIR}/{self.deck}/{new_file_name}"
             print()
             if self._img_file != "":
                 if not os.path.exists(f'{os.path.splitext(tmp_link)}.*'):
@@ -69,15 +76,15 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
                     shutil.copyfile(self._img_file, tmp_link)
             else:
                 pass
-            output = io_.SQLiteOutput(self.deck)
+            output = io_.SQLiteExporter(self.deck)
             output.updateTable("DECK", "IMG", tmp_link,
-                               condition=f"FRONT='{self.word}'")
+                               condition=self.front)
         except FileNotFoundError:
             pass
         finally:
-            output = io_.SQLiteOutput(self.deck)
+            output = io_.SQLiteExporter(self.deck)
             output.updateTable(
-                "DECK", "BACK", self._back_box.toPlainText(), f"FRONT='{self.word}'")
+                "DECK", "BACK", self._back_box.toPlainText(), self.front)
             self.close()
 
 # The new cards list classes
@@ -114,9 +121,9 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
         Responsive layout is implemented in this method, but needs some improvement
         (e.g smooth and faster arrange the 'cards') 
         """
-        inp = io_.SQLiteInput(self.deck)
+        inp = io_.SQLiteImporter(self.deck)
         try:
-            raw_cards_data = inp.fetchDataFromDBDeck()
+            raw_cards_data = inp.fetch_from_db_Deck()
         except shutil.Error:
             raw_cards_data = ()
         num_of_cards = len(raw_cards_data)
@@ -166,8 +173,8 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
 
     def _delete_card(self, card:str):
         print(card)
-        db = io_.SQLiteInput(self.deck)
-        out = io_.SQLiteOutput(self.deck)
+        db = io_.SQLiteImporter(self.deck)
+        out = io_.SQLiteExporter(self.deck)
         out.cursor.execute("DELETE FROM DECK WHERE FRONT = ?", (card,))
         out.conn.commit()
         out.cursor.execute("DELETE FROM DATE_ WHERE CARD = ?", (card,))
@@ -221,6 +228,29 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
             self.setCursor(QtCore.Qt.PointingHandCursor)
             self._options.setCursor(QtCore.Qt.PointingHandCursor)
             contextMenu = QtWidgets.QMenu()
+            contextMenu.setStyleSheet(
+                """
+                QMenu {
+                        background: white;
+                        border-radius: 5px;
+                        padding: 4px;
+                        border: 1px solid #d3d3d3
+                    }
+
+                    QMenu::item {
+                        /* sets background of menu item. set this to something non-transparent
+                            if you want menu color and menu item color to be different */
+                        background-color: white;
+                        border-radius: 5px;
+                        padding: 4px;
+                    }
+
+                    QMenu::item:selected { /* when user selects item using mouse or keyboard */
+                        background-color: #91e67b;
+                        color: white;\n
+                    }
+                """
+            )
             contextMenu.addAction("Delete card").triggered.connect(lambda: self.delete_card(self.card_info[1]))
             self._options.setMenu(contextMenu)
 
@@ -230,13 +260,14 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
             self._back.setText(back)
             pixmap = QtGui.QPixmap(img)
             if not pixmap.isNull():
-                self._img.setPixmap(pixmap.scaledToWidth(300))
+                self._img.setPixmap(pixmap.scaledToWidth(100))
             else:
                 self._img.setText("")
 
         def edit_card(self):
             self._edit_card = EditCard(self, self.deck, self._front.text())
             self._displayCardInfo()
+            self.parent_widget._createCardsList()
 
         def mousePressEvent(self, event):
             self.edit_card()

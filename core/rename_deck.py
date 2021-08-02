@@ -13,6 +13,11 @@ ROOT_DIR = Path(
 SYSTEM = system()
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
+
+if not (os.path.exists(IMG_DIR) and os.path.exists(DECKS_DIR)):
+    IMG_DIR = ROOT_DIR / "img"
+    DECKS_DIR = ROOT_DIR / "decks"
+
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
