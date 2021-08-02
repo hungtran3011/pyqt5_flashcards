@@ -4,14 +4,19 @@ Python version used here: Python 3.8. <br>
 Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="https://pypi.org/project/PyQt5/">here</a>, with Qt 5.15<br>
 <br>
 <b>Functions</b><br>
-  - Add decks and cards to study <br>
-  - Use flashcards mode to review (w/o spaced repitition) <br>
-  - Edit and delete decks and cards<br>
+<ul>
+   <li> Add decks and cards to study </li>
+   <li> Use flashcards mode to review (w/o spaced repitition) </li>
+   <li> Edit and delete decks and cards </li>
+   <li>Play simple games (multiple choices and box filling) with simple uniform spaced repetition algorithms</li>
+</ul>
+   <li>Add decks and cards to study </li>
+   <li>Use flashcards mode to review (w/o spaced repitition) </li>
+   <li> Edit and delete decks and cards </li>
+   <li> Play simple games (multiple choices and box filling) with simple uniform spaced repetition algorithms: </li>   
 <br>
 <b>Functions that will be added soon</b>
 <ul>
-  <li> Play some simple games with the cards added (written game and multiple choice game) </li>
   <li>Speaking card </li>
-  <li>Spaced repitition (SM-2 may be used)</li>
  </ul>
 <br>
