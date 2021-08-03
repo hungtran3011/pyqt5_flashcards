@@ -69,13 +69,14 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
             tmp_link = f"{IMG_DIR}/{self.deck}/{new_file_name}"
             print()
             if self._img_file != "":
-                if not os.path.exists(f'{os.path.splitext(tmp_link)}.*'):
+                if not os.path.exists(tmp_link):
                     shutil.copyfile(self._img_file, tmp_link)
                 else:
-                    os.remove(f'{os.path.splitext(tmp_link)}.*')
+                    os.remove(tmp_link)
                     shutil.copyfile(self._img_file, tmp_link)
             else:
                 pass
+            print(tmp_link)
             output = io_.SQLiteExporter(self.deck)
             output.updateTable("DECK", "IMG", tmp_link,
                                condition=self.front)

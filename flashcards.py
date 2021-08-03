@@ -279,8 +279,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def back(self):
             self.main_window_widget.set_browse_decks_mode()
+            self.click_audio.play()
 
         def next_question(self):
+            self.click_audio.play()
             if self.question_num < len(self.questions_list) - 1:
                 self.question_num += 1
                 self.show_game_progress(int((self.question_num) / len(self.questions_list) * 100))
@@ -291,6 +293,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def end_test(self):
             super().end_test()
+            self.send_message(text=f"Your score is {self.score_} / {len(self.questions_list) * 10}", type="congratulations")
             self.main_window_widget.set_browse_decks_mode()
 
     class ModifiedFlashcardsMode(FlashcardsMode):

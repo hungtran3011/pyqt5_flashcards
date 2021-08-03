@@ -13,7 +13,7 @@ ROOT_DIR = Path(
 )
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
-AUDIO_DIR = ROOT_DIR / "audio"
+AUDIO_DIR = ROOT_DIR / "../audio"
 if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR)
         and os.path.isdir(str(AUDIO_DIR)))):
     IMG_DIR = ROOT_DIR / "img"
@@ -28,9 +28,10 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
         self._next.clicked.connect(self._nextCard)
         self._previous.clicked.connect(self._prevCard)
         self._shuffle.clicked.connect(self._shuffleCards)
-        self.flip_audio = QtMultimedia.QMediaPlayer()
-        flip_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/flip.mp3")
-        self.flip_audio.setMedia(QtMultimedia.QMediaContent(flip_audio_link))
+        self.flip_audio = QtMultimedia.QSoundEffect()
+        flip_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/flip.wav")
+        # self.flip_audio.setMedia(QtMultimedia.QMediaContent(flip_audio_link))
+        self.flip_audio.setSource(flip_audio_link)
         # self._practice.clicked.connect(self._practiceDeck)
         self._refresh.clicked.connect(self._refreshCards)
 

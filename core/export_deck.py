@@ -1,3 +1,7 @@
+"""
+This file is still being drafted
+"""
+
 import os
 
 from PyQt5 import QtWidgets

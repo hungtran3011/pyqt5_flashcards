@@ -386,7 +386,7 @@ class Ui_add_card(object):
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.add_single_card), _translate("add_card", "Add a single card"))
         self.delimeters.setTitle(_translate("add_card", "Delimeters"))
         self.semicolon.setText(_translate("add_card", "; (semicolon)"))
-        self.space.setText(_translate("add_card", " (space)"))
+        self.space.setText(_translate("add_card", " (single space)"))
         self.dot.setText(_translate("add_card", ". (dot)"))
         self.different.setText(_translate("add_card", "Different (type in the box)"))
         self.comma.setText(_translate("add_card", ", (comma)"))

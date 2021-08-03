@@ -13,7 +13,7 @@ ROOT_DIR = Path(
 )
 IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
-AUDIO_DIR = ROOT_DIR / "audio"
+AUDIO_DIR = ROOT_DIR / "../audio"
 print(AUDIO_DIR)
 print("AUDIO_DIR:", os.path.isdir(str(AUDIO_DIR)))
 if not (os.path.isdir(str(IMG_DIR)) \
@@ -35,14 +35,19 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
         self.cards_status = {}
         self.score_ = 0
         self.false_answer_list = []
-        print(f"{AUDIO_DIR}/correct.mp3")
-        print(f"{AUDIO_DIR}/wrong.mp3")
-        correct_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/correct.mp3")
-        wrong_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/wrong.mp3")
+        correct_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/correct.wav")
+        wrong_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/wrong.wav")
+        click_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/click.wav")
         self.correct_audio = QtMultimedia.QMediaPlayer()
         self.correct_audio.setMedia(QtMultimedia.QMediaContent(correct_audio_link))
         self.wrong_audio = QtMultimedia.QMediaPlayer()
         self.wrong_audio.setMedia(QtMultimedia.QMediaContent(wrong_audio_link))
+        # self.correct_audio = QtMultimedia.QSoundEffect()
+        # self.correct_audio.setSource(correct_audio_link)
+        # self.wrong_audio = QtMultimedia.QSoundEffect()
+        # self.wrong_audio.setSource(wrong_audio_link)
+        self.click_audio = QtMultimedia.QMediaPlayer()
+        self.click_audio.setMedia(QtMultimedia.QMediaContent(click_audio_link))
         self.back_button.clicked.connect(self.back)
         self.button_A.clicked.connect(lambda: self.check_answers(self.button_A.text(), mode="multiple", button_clicked=self.button_A))
         self.button_B.clicked.connect(lambda: self.check_answers(self.button_B.text(), mode="multiple", button_clicked=self.button_B))
@@ -121,11 +126,12 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
                     while len(multiple_question_answers) < 4:
                         if (random_answer := rand.choice(front_list)) not in multiple_question_answers:
                             multiple_question_answers.append(random_answer)
+                    rand.shuffle(multiple_question_answers)
                 else:
                     multiple_question_answers = back_list.copy()
+                    rand.shuffle(multiple_question_answers)
                     while len(multiple_question_answers) < 4:
                         multiple_question_answers.append("")
-                rand.shuffle(multiple_question_answers)
                 multiple_choice.append(
                     {
                         "mode": "multiple choice",
@@ -246,6 +252,7 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
     
     def check_answers(self, answer, mode, button_clicked:QtWidgets.QPushButton=None):
         def writing_check(answer):
+            self.submit.setEnabled(False)
             right_answer = self.question["right answer"].strip()
             answer_to_check = answer.strip()
             if right_answer == answer_to_check:
