@@ -251,8 +251,11 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.parent_widget.show_all_decks()
 
             def export_deck(self):
-                export_dialog = ExportDeck(self.parent_widget, self.deck)
-                export_dialog.exec()
+                export_dialog = QtWidgets.QFileDialog(self)
+                file_name, ext = export_dialog.getSaveFileName(
+                    directory="~/Documents", 
+                    filter="CSV Files (*.csv);; JSON Files (*.json);; XML Files (*.xml)"
+                )
 
             # def show_context_menu(self):
             #     self.contextMenu.addAction("Delete deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
@@ -278,6 +281,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.next_question_button.clicked.connect(self.next_question)
 
         def back(self):
+            self.reset()
             self.main_window_widget.set_browse_decks_mode()
             self.click_audio.play()
 
@@ -293,8 +297,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         def end_test(self):
             super().end_test()
-            self.send_message(text=f"Your score is {self.score_} / {len(self.questions_list) * 10}", type="congratulations")
             self.main_window_widget.set_browse_decks_mode()
+            self.congrats_audio.play()
+            self.send_message(f"Congrats! You've finished the game \n Your score: {self.score_} / {len(self.questions_list) * 10}", type="congratulations")
 
     class ModifiedFlashcardsMode(FlashcardsMode):
         def __init__(self, parent, *args, **kwargs):

@@ -38,24 +38,27 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
         inp = io_.SQLiteImporter(self.deck)
         index = len(inp.fetch_from_db_Deck()) + 1
         out = io_.SQLiteExporter(self.deck)
-        front = self.front_box.toPlainText()
-        back = self.back_box.toPlainText()
-        # try:
-        img_file = os.path.basename(self.img_file)
-        # except:
-        #     pass
-        data_card = (index, front, back, f"{IMG_DIR}/{self.deck}/{img_file}")
-        data_date = (index, front, None, date.today())
-        try:
-            out.writeToDB(data_card, "DECK")
-            out.writeToDB(data_date, "DATE_")
-        except sql.IntegrityError:
-            self._sendMessage(f"Card '{front}' is already exist", "Card exist")
-        if self.img_file != "":
-            shutil.copyfile(self.img_file, f"{IMG_DIR}/{self.deck}/{img_file}")
+        front: str = self.front_box.toPlainText()
+        back: str = self.back_box.toPlainText()
+        if not (front.isspace() or back.isspace()):
+            # try:
+            img_file = os.path.basename(self.img_file)
+            # except:
+            #     pass
+            data_card = (index, front, back, f"{IMG_DIR}/{self.deck}/{img_file}")
+            data_date = (index, front, None, date.today())
+            try:
+                out.writeToDB(data_card, "DECK")
+                out.writeToDB(data_date, "DATE_")
+            except sql.IntegrityError:
+                self._sendMessage(f"Card '{front}' is already exist", "Card exist")
+            if self.img_file != "":
+                shutil.copyfile(self.img_file, f"{IMG_DIR}/{self.deck}/{img_file}")
+            else:
+                pass
+            self.close()
         else:
-            pass
-        self.close()
+            self._sendMessage("The front and back of the card must not be empty")
 
     def _chooseImage(self):
         default_dir = f'{os.path.expanduser("~")}/Pictures'

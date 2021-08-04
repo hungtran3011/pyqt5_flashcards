@@ -38,6 +38,7 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
         correct_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/correct.wav")
         wrong_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/wrong.wav")
         click_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/click.wav")
+        congrats_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/congratulations.mp3")
         self.correct_audio = QtMultimedia.QMediaPlayer()
         self.correct_audio.setMedia(QtMultimedia.QMediaContent(correct_audio_link))
         self.wrong_audio = QtMultimedia.QMediaPlayer()
@@ -48,6 +49,8 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
         # self.wrong_audio.setSource(wrong_audio_link)
         self.click_audio = QtMultimedia.QMediaPlayer()
         self.click_audio.setMedia(QtMultimedia.QMediaContent(click_audio_link))
+        self.congrats_audio = QtMultimedia.QMediaPlayer()
+        self.congrats_audio.setMedia(QtMultimedia.QMediaContent(congrats_audio_link))
         self.back_button.clicked.connect(self.back)
         self.button_A.clicked.connect(lambda: self.check_answers(self.button_A.text(), mode="multiple", button_clicked=self.button_A))
         self.button_B.clicked.connect(lambda: self.check_answers(self.button_B.text(), mode="multiple", button_clicked=self.button_B))
@@ -158,9 +161,11 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
     def show_questions(self, num):
         print(num)
         self.question = self.questions_list[num]
+        print(self.question)
         self.true_answer_label.setText("")
         self.answer_box.clear()
         self.next_question_button.setEnabled(False)
+        self.submit.setEnabled(True)
         assert type(self.questions_list) == list
         assert type(self.question) == dict
         if self.question["mode"] == "writing":
@@ -332,7 +337,7 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
         if true_or_false is True:
             score = 10
         self.score_ += score
-        self.score.setText(f"{self.score_}")
+        self.score.setText(str(self.score_))
 
     def send_message(self, text, type):
         message = QtWidgets.QMessageBox(self)
@@ -348,7 +353,11 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
             message.setIcon(QtWidgets.QMessageBox.Critical)
         elif type in ["congratulations", "congrats"]:
             pixmap = QtGui.QPixmap(f"{IMG_DIR}/congrats.png")
-            message.setIcon(QtGui.QIcon())
+            pixmap.scaledToHeight(32)
+            message.setIconPixmap(pixmap)
+            font = QtGui.QFont()
+            font.setPointSize(15)
+            message.setFont(font)
         else:
             raise ValueError("The 'type' arguments just accept these str values: \
                 'warning', 'information', 'no icon', 'question' and 'critical'")
@@ -400,6 +409,8 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
 
     def reset(self):
         self.question_num = 0
+        self.score_ = 0
         self.show_game_progress(0)
-        self.create_question()
-        self.show_questions()
+        # self.create_question()
+        self.score.setText(str(self.score_))
+        self.show_questions(self.question_num)
