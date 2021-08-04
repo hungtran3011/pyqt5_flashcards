@@ -355,6 +355,7 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
             pixmap = QtGui.QPixmap(f"{IMG_DIR}/congrats.png")
             pixmap.scaledToHeight(32)
             message.setIconPixmap(pixmap)
+            message.setWindowTitle("Congratulations")
             font = QtGui.QFont()
             font.setPointSize(15)
             message.setFont(font)
