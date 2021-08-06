@@ -17,7 +17,11 @@ Functions
 
 User manual
 -----------
-Run `flashcards.py` as the main script (executable files is out soon)
+Run `flashcards.py` as the main script (executable files is out soon). Run 
+```bash
+   pip install -r requirements.txt
+```
+to install all neccessary packages from pip.
 1. Home page/ Browse deck.
 
    This is the first thing showing up when starting the program.
