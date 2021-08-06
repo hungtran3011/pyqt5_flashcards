@@ -7,7 +7,7 @@ from datetime import date
 
 from PyQt5 import QtWidgets
 
-from core.ui_package.ui_new_add_deck import Ui_new_add_deck
+from core.ui_package.ui_add_deck import Ui_add_deck
 
 import core.io_ as io_
 
@@ -23,7 +23,7 @@ if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR))):
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
-class AddDeck(Ui_new_add_deck, QtWidgets.QDialog):
+class AddDeck(Ui_add_deck, QtWidgets.QDialog):
     def __init__(self, parent) -> None:
         super().__init__(parent)
         self.setupUi(self)
