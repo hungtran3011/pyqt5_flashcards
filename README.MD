@@ -5,8 +5,8 @@ Description
 -----------
 
 - This is a basic flashcards app made of **Python** and **Qt**. Add some decks and cards, then start reviewing with flashcards mode (real-life flashcards simulation - to review any time) and game mode (play some games with the cards and ) 
-- Python version is used here: **Python 3.8**.
-- Qt version used here: **PyQt5 (Qt bindings for Python)** - as description <a href="https://pypi.org/project/PyQt5/">here</a>, with Qt 5.15
+- Python version is used here: **<a href="https://docs.python.org/3/whatsnew/3.8.html">Python 3.8</a>**.
+- Qt version is used here: **<a href="https://pypi.org/project/PyQt5/">PyQt5</a> (Qt bindings for Python)**, with Qt 5.15
 
 Functions
 ---------
@@ -41,7 +41,15 @@ Run `flashcards.py` as the main script (executable files is out soon)
    * Click the `Shuffle` button to shuffle the deck
    * Click the `Practice` button to practice with game mode
 5. Game mode
-6. Import/Export deck to CSV, XML and JSON
+
+   There are two games in game mode: 'multiple choices' and 'filling in the box':
+   - 'Multiple choice': The back of a card will be asked, and there are four choices with just one correct answer, which is the text in the front of the card
+   - 'Filling in the box': The back of a card will be asked, and user needs to type their answers in the grey box below and click `Submit` to check their answer
+   - Notes:
+      - In 'Filling in the box' game, don't worry if you type some trailing space or tabs (so-called "whitespace characters") because the program will omit them.
+      - The score given will be 10 for each correct answer, and 0 for the wrong one.
+
+7. Import/Export deck to CSV, XML and JSON
    (CSV recommended)
    * To import deck, go to home page, click `Add deck` <br>
      Tick the choice `Import files (JSON, XML and CSV are supported)', choose files
