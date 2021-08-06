@@ -13,5 +13,8 @@ Qt version used here: PyQt5 (Qt bindings for Python) - as description <a href="h
 <b>Functions that will be added soon</b>
 <ul>
   <li>Speaking card </li>
- </ul>
-<br>
+</ul>
+<b>User guide</b><br>
+<ul>
+   <li></li>
+</ul>

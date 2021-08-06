@@ -97,39 +97,6 @@ class MainWindow(QtWidgets.QMainWindow):
             except ZeroDivisionError:
                 pass
 
-        def show_all_decks(self):
-            DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
-            DECKS_NUM = len(DECKS_LIST)
-            if len(DECKS_LIST) > 0:
-                print(self._all_decks_area.width())
-                columns = self._all_decks_area.width() // 480
-                full_rows_num = DECKS_NUM // columns
-                print(f"columns = {columns}, full_rows_num = {full_rows_num}")
-                remainder = DECKS_NUM % columns
-                for deck in reversed(range(self.getDecksArea().count())):
-                    tmp_widget = self.getDecksArea().itemAt(deck).widget()
-                    self.getDecksArea().removeWidget(tmp_widget)
-                    tmp_widget.setParent(None)
-                    tmp_widget.deleteLater()
-
-                for row in range(full_rows_num):
-                    for col in range(columns):
-                        index = columns * row + col
-                        deck_name = self.ModifiedDeckInfo(
-                                self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
-                        self.getDecksArea().addWidget(deck_name, row, col)
-                if remainder != 0:
-                    new_row = full_rows_num
-                    for col in range(remainder):
-                        index = new_row * columns + col
-                        deck_name = self.ModifiedDeckInfo(
-                                self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}"
-                        )
-                        self.getDecksArea().addWidget(deck_name, new_row, col)
-                self.set_number_of_decks()
-            else:
-                self.insert_icon()
-
         def resizeEvent(self, event):
             self.show_all_decks()
 
@@ -190,7 +157,7 @@ class MainWindow(QtWidgets.QMainWindow):
             settings_dialog = self.main_window_widget.ModifiedSettings(self)
             settings_dialog.exec()
 
-        class ModifiedDeckInfo(BrowseDeck.DeckInfo):
+        class DeckInfo(BrowseDeck.DeckInfo):
             def __init__(self, parent, deck, *args, **kwargs):
                 super().__init__(parent, deck)
                 self.parent_widget: MainWindow.ModifiedBrowseDeck = parent
@@ -240,8 +207,8 @@ class MainWindow(QtWidgets.QMainWindow):
             def show_view_cards_mode(self):
                 self.parent_widget.show_view_cards_mode(self.deck)
 
-            def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
-                self.parent_widget.show_view_cards_mode(self.deck)
+            # def mousePressEvent(self, event: QtGui.QMouseEvent) -> None:
+            #     self.parent_widget.show_view_cards_mode(self.deck)
 
             def delete_deck(self, name):
                 self.parent_widget.delete_deck(name)
@@ -253,7 +220,7 @@ class MainWindow(QtWidgets.QMainWindow):
             def export_deck(self):
                 export_dialog = QtWidgets.QFileDialog(self)
                 file_name, ext = export_dialog.getSaveFileName(
-                    directory="~/Documents", 
+                    directory=f"~/Documents/{self.deck}", 
                     filter="CSV Files (*.csv);; JSON Files (*.json);; XML Files (*.xml)"
                 )
 
@@ -296,10 +263,10 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.end_test()
 
         def end_test(self):
-            super().end_test()
             self.main_window_widget.set_browse_decks_mode()
-            self.congrats_audio.play()
             self.send_message(f"Congrats! You've finished the game \n Your score: {self.score_} / {len(self.questions_list) * 10}", type="congratulations")
+            self.congrats_audio.play()
+            super().end_test()
 
     class ModifiedFlashcardsMode(FlashcardsMode):
         def __init__(self, parent, *args, **kwargs):

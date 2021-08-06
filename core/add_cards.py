@@ -9,7 +9,7 @@ import sqlite3 as sql
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 import core.io_ as io_
-from core.ui_package.ui_add_card import Ui_add_card
+from core.ui_package.ui_add_cards import Ui_add_card
 
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
@@ -28,13 +28,13 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
         self.setupUi(self)
         self.setWindowTitle(f"Add new card to deck: {self.deck}")
         self.img.setGeometry(self.img.x(), self.img.y(), 300, 400)
-        self.save_button_single.clicked.connect(self._saveSingleCard)
-        self.choose_image.clicked.connect(self._chooseImage)
+        self.save_button_single.clicked.connect(self._save_single_card)
+        self.choose_image.clicked.connect(self._choose_image)
         self.cancel_button_single.clicked.connect(self.close)
         self.img_file = ""
         self.exec_()
 
-    def _saveSingleCard(self):
+    def _save_single_card(self):
         inp = io_.SQLiteImporter(self.deck)
         index = len(inp.fetch_from_db_Deck()) + 1
         out = io_.SQLiteExporter(self.deck)
@@ -51,16 +51,19 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
                 out.writeToDB(data_card, "DECK")
                 out.writeToDB(data_date, "DATE_")
             except sql.IntegrityError:
-                self._sendMessage(f"Card '{front}' is already exist", "Card exist")
+                self._send_message(f"Card '{front}' is already exist", "Card exist")
             if self.img_file != "":
                 shutil.copyfile(self.img_file, f"{IMG_DIR}/{self.deck}/{img_file}")
             else:
                 pass
             self.close()
         else:
-            self._sendMessage("The front and back of the card must not be empty")
+            self._send_message("The front and back of the card must not be empty")
+    
+    def _save_multiple_cards(self):
+        pass
 
-    def _chooseImage(self):
+    def _choose_image(self):
         default_dir = f'{os.path.expanduser("~")}/Pictures'
         print(default_dir)
         self.img_file, _ = QtWidgets.QFileDialog.getOpenFileName(
@@ -68,7 +71,7 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
         pixmap = QtGui.QPixmap(self.img_file)
         self.img.setPixmap(pixmap.scaledToHeight(200))
 
-    def _sendMessage(self, text, title=""):
+    def _send_message(self, text, title=""):
         message = QtWidgets.QMessageBox(self)
         message.setWindowTitle(title)
         message.setIcon(QtWidgets.QMessageBox.Warning)

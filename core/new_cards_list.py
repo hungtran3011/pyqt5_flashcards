@@ -2,6 +2,7 @@ import os
 import sys
 import shutil
 from pathlib import Path
+from datetime import date
 
 
 from PyQt5 import QtGui, QtWidgets, QtCore, QtSvg
@@ -253,6 +254,8 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
                 """
             )
             contextMenu.addAction("Delete card").triggered.connect(lambda: self.delete_card(self.card_info[1]))
+            contextMenu.addAction("Reset card").triggered.connect(lambda: self.reset_card(self.card_info[1]))
+            
             self._options.setMenu(contextMenu)
 
         def _displayCardInfo(self):
@@ -275,3 +278,7 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
 
         def delete_card(self, card:str):
             self.parent_widget._delete_card(card)
+
+        def reset_card(self, card: str):
+            output = io_.SQLiteExporter(self.deck)
+            output.updateTable("DATE_", "NEXT_REVIEW", str(date.today()), card)

@@ -93,6 +93,11 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
                 )
         # print("card_list: ", cards_list)     
         init_question = self.create_question(self.cards_list)
+        for item in reversed(range(self.revised_widget.layout().count())):
+            tmp_widget = self.revised_widget.layout().itemAt(item).widget()
+            self.getDecksArea().removeWidget(tmp_widget)
+            tmp_widget.setParent(None)
+            tmp_widget.deleteLater()
         if init_question:
             self.show_questions(self.question_num)
             # self.send_message("The deck must have at least 5 cards to play games")
@@ -147,8 +152,14 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
                 self.cards_status.update(
                     {
                         card: {
-                            "writing": False,
-                            "multiple choice": False
+                            "writing": {
+                                "answered": False,
+                                "correct": False
+                            },
+                            "multiple choice": {
+                                "answered": False,
+                                "correct": False
+                            }
                         }
                     }   
                 )
@@ -283,7 +294,8 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
                 # print(self.wrong_audio.status())
                 self.wrong_audio.play()
             self.true_answer_label.setText(f"Correct answer: {right_answer}")
-            self.cards_status[self.question["right answer"]]["writing"] = answer_status
+            self.cards_status[self.question["right answer"]]["writing"]["correct"] = answer_status
+            self.cards_status[self.question["right answer"]]["writing"]["answered"] = True
             self.calculate_score(answer_status)
             # self.next_question()
 
@@ -315,10 +327,12 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
                 # print(self.wrong_audio.status())
                 self.wrong_audio.play()
             self.true_answer_label.setText(f"Correct answer: {right_answer}")
-            self.cards_status[self.question["right answer"]]["multiple choice"] = answer_status
+            self.cards_status[self.question["right answer"]]["multiple choice"]["correct"] = answer_status
+            self.cards_status[self.question["right answer"]]["multiple choice"]["answered"] = True
             self.calculate_score(answer_status)
             # self.next_question()
-
+        
+        card = self.question["right answer"].strip()
         if mode == "multiple":
             multiple_choice_check(answer, button_clicked)
             self.next_question_button.setEnabled(True)
@@ -327,6 +341,30 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
             self.next_question_button.setEnabled(True)
         else:
             raise ValueError("'mode' argument must be one of two values: 'multiple' or 'writing'")
+        if self.cards_status[card]["multiple choice"]["answered"] \
+            and self.cards_status[card]["writing"]["answered"]:
+            status = ""
+            if self.cards_status[card]["multiple choice"]["correct"] \
+                and self.cards_status[card]["writing"]["correct"]:
+                status = "2/2"
+            elif self.cards_status[card]["multiple choice"]["answered"] \
+                or self.cards_status[card]["writing"]["answered"]:
+                status = "1/2"
+            else:
+                status = "0/2"
+            front_label = QtWidgets.QLabel(card, self.revised_widget)
+            front_label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+            score_label = QtWidgets.QLabel(status, self.revised_widget)
+            score_label.setSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+            score_label.setStyleSheet("color: #91e67b")
+            score_label.setAlignment(QtCore.Qt.AlignRight)
+            font = QtGui.QFont()
+            font.setPointSize(15)
+            front_label.setFont(font)
+            score_label.setFont(font)
+            row = self.revised_widget.layout().rowCount()
+            self.revised_widget.layout().setWidget(row, QtWidgets.QFormLayout.LabelRole, front_label)       
+            self.revised_widget.layout().setWidget(row, QtWidgets.QFormLayout.FieldRole, score_label)       
 
 
     # def next_question(self):
@@ -414,4 +452,4 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
         self.show_game_progress(0)
         # self.create_question()
         self.score.setText(str(self.score_))
-        self.show_questions(self.question_num)
+        #self.show_questions(self.question_num)

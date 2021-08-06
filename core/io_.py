@@ -81,7 +81,6 @@ class SQLiteExporter:
             self.conn.commit()
 
     def updateTable(self, table:str, column_to_change:str, data:str, condition:str):
-        print(table, column_to_change, data, condition)
         if table == "DECK":
             if column_to_change == "BACK":
                 self.cursor.execute("UPDATE DECK SET BACK = ? WHERE FRONT = ?", (data, condition))

@@ -41,37 +41,37 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         self.show_all_decks()
 
     def show_all_decks(self):
-            DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
-            DECKS_NUM = len(DECKS_LIST)
-            if len(DECKS_LIST) > 0:
-                print(self._all_decks_area.width())
-                columns = self._all_decks_area.width() // 480
-                full_rows_num = DECKS_NUM // columns
-                print(f"columns = {columns}, full_rows_num = {full_rows_num}")
-                remainder = DECKS_NUM % columns
-                for deck in reversed(range(self.getDecksArea().count())):
-                    tmp_widget = self.getDecksArea().itemAt(deck).widget()
-                    self.getDecksArea().removeWidget(tmp_widget)
-                    tmp_widget.setParent(None)
-                    tmp_widget.deleteLater()
-
-                for row in range(full_rows_num):
-                    for col in range(columns):
-                        index = columns * row + col
-                        deck_name = self.DeckInfo(
-                                self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
-                        self.getDecksArea().addWidget(deck_name, row, col)
-                if remainder != 0:
-                    new_row = full_rows_num
-                    for col in range(remainder):
-                        index = new_row * columns + col
-                        deck_name = self.DeckInfo(
-                                self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}"
-                        )
-                        self.getDecksArea().addWidget(deck_name, new_row, col)
-                self.set_number_of_decks()
-            else:
-                self.insert_icon()
+        DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
+        DECKS_NUM = len(DECKS_LIST)
+        if len(DECKS_LIST) > 0:
+            print(self._all_decks_area.width())
+            columns = self._all_decks_area.width() // 480
+            full_rows_num = DECKS_NUM // columns
+            print(f"columns = {columns}, full_rows_num = {full_rows_num}")
+            remainder = DECKS_NUM % columns
+            for deck in reversed(range(self.getDecksArea().count())):
+                tmp_widget = self.getDecksArea().itemAt(deck).widget()
+                self.getDecksArea().removeWidget(tmp_widget)
+                tmp_widget.setParent(None)
+                tmp_widget.deleteLater()
+           
+            for row in range(full_rows_num):
+                for col in range(columns):
+                    index = columns * row + col
+                    deck_name = self.DeckInfo(
+                            self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
+                    self.getDecksArea().addWidget(deck_name, row, col)
+            if remainder != 0:
+                new_row = full_rows_num
+                for col in range(remainder):
+                    index = new_row * columns + col
+                    deck_name = self.DeckInfo(
+                            self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}"
+                    )
+                    self.getDecksArea().addWidget(deck_name, new_row, col)
+            self.set_number_of_decks()
+        else:
+            self.insert_icon()
 
     def getDecksArea(self):
         return self.gridLayout

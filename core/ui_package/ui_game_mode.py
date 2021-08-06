@@ -14,188 +14,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_game_mode(object):
     def setupUi(self, game_mode):
         game_mode.setObjectName("game_mode")
-        game_mode.resize(853, 541)
+        game_mode.resize(846, 541)
         game_mode.setStyleSheet("QWidget{\n"
 "    background: white;\n"
 "}")
         self.gridLayout = QtWidgets.QGridLayout(game_mode)
         self.gridLayout.setObjectName("gridLayout")
-        self.score_frame = QtWidgets.QFrame(game_mode)
-        self.score_frame.setMinimumSize(QtCore.QSize(200, 0))
-        self.score_frame.setMaximumSize(QtCore.QSize(250, 16777215))
-        self.score_frame.setStyleSheet("border-radius: 5px")
-        self.score_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.score_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.score_frame.setObjectName("score_frame")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.score_frame)
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.score_label = QtWidgets.QLabel(self.score_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.score_label.sizePolicy().hasHeightForWidth())
-        self.score_label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.score_label.setFont(font)
-        self.score_label.setAlignment(QtCore.Qt.AlignCenter)
-        self.score_label.setObjectName("score_label")
-        self.verticalLayout.addWidget(self.score_label)
-        self.score = QtWidgets.QLabel(self.score_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.score.sizePolicy().hasHeightForWidth())
-        self.score.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(25)
-        self.score.setFont(font)
-        self.score.setStyleSheet("margin-bottom: 30px;\n"
-"margin-top: 30px;\n"
-"color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );")
-        self.score.setAlignment(QtCore.Qt.AlignCenter)
-        self.score.setObjectName("score")
-        self.verticalLayout.addWidget(self.score)
-        self.revise_label = QtWidgets.QLabel(self.score_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.revise_label.sizePolicy().hasHeightForWidth())
-        self.revise_label.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.revise_label.setFont(font)
-        self.revise_label.setObjectName("revise_label")
-        self.verticalLayout.addWidget(self.revise_label)
-        self.revised_frame = QtWidgets.QScrollArea(self.score_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.revised_frame.sizePolicy().hasHeightForWidth())
-        self.revised_frame.setSizePolicy(sizePolicy)
-        self.revised_frame.setStyleSheet("QWidget{\n"
-"    background: white;\n"
-"}\n"
-"QScrollBar:vertical {\n"
-"    border: 0;\n"
-"    width: 6px;\n"
-"    border-radius: 3px;\n"
-"    background: #d3d3d3;\n"
-"}\n"
-"\n"
-"QScrollBar::handle:vertical {\n"
-"    border: 0;\n"
-"    border-radius: 3px;\n"
-"    background: rgb(161, 161, 161);\n"
-"}\n"
-"QScrollBar::handle:vertical:hover {\n"
-"    background-color: rgb(143, 143, 143);\n"
-"}\n"
-"QScrollBar::handle:vertical:pressed{\n"
-"    background-color: rgb(120, 120, 120);\n"
-"}\n"
-"QScrollBar::add-line:vertical {\n"
-"    height: 0px;\n"
-"}\n"
-"QScrollBar::sub-line:vertical {\n"
-"    height: 0px;\n"
-"}\n"
-"QScrollBar:horizontal {\n"
-"    border: 0;\n"
-"    height: 6px;\n"
-"    border-radius: 3px;\n"
-"    background: #d3d3d3;\n"
-"}\n"
-"QScrollBar::handle:horizontal {\n"
-"    border: 0;\n"
-"    border-radius: 3px;\n"
-"    background: rgb(161, 161, 161);\n"
-"}\n"
-"QScrollBar::handle:horizontal:hover {\n"
-"    background-color: rgb(143, 143, 143);\n"
-"}\n"
-"QScrollBar::handle:horizontal:pressed{\n"
-"    background-color: rgb(120, 120, 120);\n"
-"}\n"
-"QScrollBar::add-line:horizontal {\n"
-"    width: 0px;\n"
-"}\n"
-"QScrollBar::sub-line:horizontal {\n"
-"    width: 0px;\n"
-"}")
-        self.revised_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.revised_frame.setWidgetResizable(True)
-        self.revised_frame.setObjectName("revised_frame")
-        self.revised_widget = QtWidgets.QWidget()
-        self.revised_widget.setGeometry(QtCore.QRect(0, 0, 188, 343))
-        self.revised_widget.setObjectName("revised_widget")
-        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.revised_widget)
-        self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.revised_frame.setWidget(self.revised_widget)
-        self.verticalLayout.addWidget(self.revised_frame)
-        self.gridLayout.addWidget(self.score_frame, 0, 2, 5, 1)
-        self.header_frame = QtWidgets.QFrame(game_mode)
-        self.header_frame.setStyleSheet("border-radius: 5px;")
-        self.header_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
-        self.header_frame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.header_frame.setObjectName("header_frame")
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.header_frame)
-        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.back_button = QtWidgets.QPushButton(self.header_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.back_button.sizePolicy().hasHeightForWidth())
-        self.back_button.setSizePolicy(sizePolicy)
-        self.back_button.setStyleSheet("QPushButton{\n"
-"    border: 2px solid #91e67b;\n"
-"    border-radius: 5px;\n"
-"    padding: 5px;\n"
-"    padding-left: 10px;\n"
-"    padding-right: 10px;    \n"
-"    background:white;\n"
-"}\n"
-"\n"
-"QPushButton:hover{\n"
-"    background-color: #91e67b;\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QPushButton:pressed{\n"
-"    background-color: #7fc86b;\n"
-"    border-color: #7fc86b;\n"
-"    color: white;\n"
-"}")
-        self.back_button.setObjectName("back_button")
-        self.horizontalLayout_2.addWidget(self.back_button)
-        self.game_progress = QtWidgets.QProgressBar(self.header_frame)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.game_progress.sizePolicy().hasHeightForWidth())
-        self.game_progress.setSizePolicy(sizePolicy)
-        self.game_progress.setMinimumSize(QtCore.QSize(0, 0))
-        self.game_progress.setMaximumSize(QtCore.QSize(16777215, 10))
-        self.game_progress.setStyleSheet("QProgressBar{\n"
-"    border: 0px;\n"
-"    border-radius: 5px;\n"
-"    background-color: rgb(227, 227, 227);\n"
-"}\n"
-"\n"
-"QProgressBar::chunk{\n"
-"    border: 0px;\n"
-"    background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );\n"
-"  border-radius: 5px;\n"
-"}")
-        self.game_progress.setProperty("value", 24)
-        self.game_progress.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
-        self.game_progress.setTextVisible(False)
-        self.game_progress.setOrientation(QtCore.Qt.Horizontal)
-        self.game_progress.setInvertedAppearance(False)
-        self.game_progress.setFormat("")
-        self.game_progress.setObjectName("game_progress")
-        self.horizontalLayout_2.addWidget(self.game_progress)
-        self.gridLayout.addWidget(self.header_frame, 0, 1, 1, 1)
         self.game_frame = QtWidgets.QFrame(game_mode)
         self.game_frame.setStyleSheet("border-radius: 5px;")
         self.game_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -274,13 +98,13 @@ class Ui_game_mode(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.writing_widget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.answer_box = QtWidgets.QTextEdit(self.writing_widget)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.answer_box.setFont(font)
         self.answer_box.setStyleSheet("background-color: #d3d3d3;\n"
 "padding: 5px;\n"
 "border-radius: 5px;")
         self.answer_box.setObjectName("answer_box")
-        font = QtGui.QFont()
-        font.setPointSize(18)
-        self.answer_box.setFont(font)
         self.verticalLayout_2.addWidget(self.answer_box)
         self.submit_frame = QtWidgets.QFrame(self.writing_widget)
         self.submit_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
@@ -363,18 +187,191 @@ class Ui_game_mode(object):
         self.true_answer_label.setObjectName("true_answer_label")
         self.verticalLayout_5.addWidget(self.true_answer_label)
         self.gridLayout.addWidget(self.game_frame, 1, 1, 1, 1)
+        self.score_frame = QtWidgets.QFrame(game_mode)
+        self.score_frame.setMinimumSize(QtCore.QSize(250, 0))
+        self.score_frame.setMaximumSize(QtCore.QSize(400, 16777215))
+        self.score_frame.setStyleSheet("border-radius: 5px")
+        self.score_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.score_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.score_frame.setObjectName("score_frame")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.score_frame)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.score_label = QtWidgets.QLabel(self.score_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.score_label.sizePolicy().hasHeightForWidth())
+        self.score_label.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.score_label.setFont(font)
+        self.score_label.setAlignment(QtCore.Qt.AlignCenter)
+        self.score_label.setObjectName("score_label")
+        self.verticalLayout.addWidget(self.score_label)
+        self.score = QtWidgets.QLabel(self.score_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.score.sizePolicy().hasHeightForWidth())
+        self.score.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(25)
+        self.score.setFont(font)
+        self.score.setStyleSheet("margin-bottom: 30px;\n"
+"margin-top: 30px;\n"
+"color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );")
+        self.score.setAlignment(QtCore.Qt.AlignCenter)
+        self.score.setObjectName("score")
+        self.verticalLayout.addWidget(self.score)
+        self.revise_label = QtWidgets.QLabel(self.score_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.revise_label.sizePolicy().hasHeightForWidth())
+        self.revise_label.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setPointSize(15)
+        self.revise_label.setFont(font)
+        self.revise_label.setObjectName("revise_label")
+        self.verticalLayout.addWidget(self.revise_label)
+        self.revised_frame = QtWidgets.QScrollArea(self.score_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.revised_frame.sizePolicy().hasHeightForWidth())
+        self.revised_frame.setSizePolicy(sizePolicy)
+        self.revised_frame.setStyleSheet("QWidget{\n"
+"    background: white;\n"
+"}\n"
+"QScrollBar:vertical {\n"
+"    border: 0;\n"
+"    width: 6px;\n"
+"    border-radius: 3px;\n"
+"    background: #d3d3d3;\n"
+"}\n"
+"\n"
+"QScrollBar::handle:vertical {\n"
+"    border: 0;\n"
+"    border-radius: 3px;\n"
+"    background: rgb(161, 161, 161);\n"
+"}\n"
+"QScrollBar::handle:vertical:hover {\n"
+"    background-color: rgb(143, 143, 143);\n"
+"}\n"
+"QScrollBar::handle:vertical:pressed{\n"
+"    background-color: rgb(120, 120, 120);\n"
+"}\n"
+"QScrollBar::add-line:vertical {\n"
+"    height: 0px;\n"
+"}\n"
+"QScrollBar::sub-line:vertical {\n"
+"    height: 0px;\n"
+"}\n"
+"QScrollBar:horizontal {\n"
+"    border: 0;\n"
+"    height: 6px;\n"
+"    border-radius: 3px;\n"
+"    background: #d3d3d3;\n"
+"}\n"
+"QScrollBar::handle:horizontal {\n"
+"    border: 0;\n"
+"    border-radius: 3px;\n"
+"    background: rgb(161, 161, 161);\n"
+"}\n"
+"QScrollBar::handle:horizontal:hover {\n"
+"    background-color: rgb(143, 143, 143);\n"
+"}\n"
+"QScrollBar::handle:horizontal:pressed{\n"
+"    background-color: rgb(120, 120, 120);\n"
+"}\n"
+"QScrollBar::add-line:horizontal {\n"
+"    width: 0px;\n"
+"}\n"
+"QScrollBar::sub-line:horizontal {\n"
+"    width: 0px;\n"
+"}")
+        self.revised_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.revised_frame.setWidgetResizable(True)
+        self.revised_frame.setObjectName("revised_frame")
+        self.revised_widget = QtWidgets.QWidget()
+        self.revised_widget.setGeometry(QtCore.QRect(0, 0, 238, 331))
+        self.revised_widget.setObjectName("revised_widget")
+        self.formLayout = QtWidgets.QFormLayout(self.revised_widget)
+        self.formLayout.setRowWrapPolicy(QtWidgets.QFormLayout.WrapLongRows)
+        self.formLayout.setObjectName("formLayout")
+        self.revised_frame.setWidget(self.revised_widget)
+        self.verticalLayout.addWidget(self.revised_frame)
+        self.gridLayout.addWidget(self.score_frame, 0, 2, 5, 1)
+        self.header_frame = QtWidgets.QFrame(game_mode)
+        self.header_frame.setStyleSheet("border-radius: 5px;")
+        self.header_frame.setFrameShape(QtWidgets.QFrame.NoFrame)
+        self.header_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.header_frame.setObjectName("header_frame")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.header_frame)
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        self.back_button = QtWidgets.QPushButton(self.header_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.back_button.sizePolicy().hasHeightForWidth())
+        self.back_button.setSizePolicy(sizePolicy)
+        self.back_button.setStyleSheet("QPushButton{\n"
+"    border: 2px solid #91e67b;\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"    padding-left: 10px;\n"
+"    padding-right: 10px;    \n"
+"    background:white;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color: #91e67b;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color: #7fc86b;\n"
+"    border-color: #7fc86b;\n"
+"    color: white;\n"
+"}")
+        self.back_button.setObjectName("back_button")
+        self.horizontalLayout_2.addWidget(self.back_button)
+        self.game_progress = QtWidgets.QProgressBar(self.header_frame)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.game_progress.sizePolicy().hasHeightForWidth())
+        self.game_progress.setSizePolicy(sizePolicy)
+        self.game_progress.setMinimumSize(QtCore.QSize(0, 0))
+        self.game_progress.setMaximumSize(QtCore.QSize(16777215, 10))
+        self.game_progress.setStyleSheet("QProgressBar{\n"
+"    border: 0px;\n"
+"    border-radius: 5px;\n"
+"    background-color: rgb(227, 227, 227);\n"
+"}\n"
+"\n"
+"QProgressBar::chunk{\n"
+"    border: 0px;\n"
+"    background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );\n"
+"  border-radius: 5px;\n"
+"}")
+        self.game_progress.setProperty("value", 24)
+        self.game_progress.setAlignment(QtCore.Qt.AlignRight|QtCore.Qt.AlignTrailing|QtCore.Qt.AlignVCenter)
+        self.game_progress.setTextVisible(False)
+        self.game_progress.setOrientation(QtCore.Qt.Horizontal)
+        self.game_progress.setInvertedAppearance(False)
+        self.game_progress.setFormat("")
+        self.game_progress.setObjectName("game_progress")
+        self.horizontalLayout_2.addWidget(self.game_progress)
+        self.gridLayout.addWidget(self.header_frame, 0, 1, 1, 1)
 
         self.retranslateUi(game_mode)
-        self.question_widget.setCurrentIndex(1)
+        self.question_widget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(game_mode)
 
     def retranslateUi(self, game_mode):
         _translate = QtCore.QCoreApplication.translate
         game_mode.setWindowTitle(_translate("game_mode", "Game mode for deck: "))
-        self.score_label.setText(_translate("game_mode", "Your score:"))
-        self.score.setText(_translate("game_mode", "0"))
-        self.revise_label.setText(_translate("game_mode", "Revised"))
-        self.back_button.setText(_translate("game_mode", "Back"))
         self.question_type_label.setText(_translate("game_mode", "Type the right answer"))
         self.question_label.setText(_translate("game_mode", "Question"))
         self.next_question_button.setText(_translate("game_mode", "Next question"))
@@ -384,3 +381,7 @@ class Ui_game_mode(object):
         self.button_B.setText(_translate("game_mode", "B. PushButton"))
         self.button_C.setText(_translate("game_mode", "C. PushButton"))
         self.true_answer_label.setText(_translate("game_mode", "TextLabel"))
+        self.score_label.setText(_translate("game_mode", "Your score:"))
+        self.score.setText(_translate("game_mode", "0"))
+        self.revise_label.setText(_translate("game_mode", "Revised"))
+        self.back_button.setText(_translate("game_mode", "Back"))
