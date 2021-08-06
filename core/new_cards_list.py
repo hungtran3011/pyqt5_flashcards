@@ -6,7 +6,7 @@ from datetime import date
 
 
 from PyQt5 import QtGui, QtWidgets, QtCore, QtSvg
-from core.ui_package.ui_new_cards_list import Ui__new_cards_list
+from core.ui_package.ui_new_cards_list import Ui_new_cards_list
 from core.ui_package.ui_edit_card import Ui__edit_card
 from core.ui_package.ui_card_info import Ui__card_info
 
@@ -95,7 +95,7 @@ class EditCard(QtWidgets.QDialog, Ui__edit_card):
 # front, back, image
 
 
-class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
+class NewCardsList(QtWidgets.QDialog, Ui_new_cards_list):
     def __init__(self, parent):
         super().__init__(parent)
         self.setupUi(self)
