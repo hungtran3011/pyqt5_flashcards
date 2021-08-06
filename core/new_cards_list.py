@@ -253,8 +253,8 @@ class NewCardsList(QtWidgets.QDialog, Ui__new_cards_list):
                     }
                 """
             )
-            contextMenu.addAction("Delete card").triggered.connect(lambda: self.delete_card(self.card_info[1]))
-            contextMenu.addAction("Reset card").triggered.connect(lambda: self.reset_card(self.card_info[1]))
+            contextMenu.addAction("Delete this card").triggered.connect(lambda: self.delete_card(self.card_info[1]))
+            contextMenu.addAction("Reset review date").triggered.connect(lambda: self.reset_card(self.card_info[1]))
             
             self._options.setMenu(contextMenu)
 

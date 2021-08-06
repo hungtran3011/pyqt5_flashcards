@@ -192,8 +192,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 """
                 )
                 # self._more_funcs.clicked.connect(self.show_context_menu)
-                self.contextMenu.addAction("Delete deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
-                self.contextMenu.addAction("Rename deck").triggered.connect(self.renameDeck)
+                self.contextMenu.addAction("Delete this deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
+                self.contextMenu.addAction("Rename this deck").triggered.connect(self.renameDeck)
                 self.contextMenu.addAction("Export cards").triggered.connect(self.export_deck)
                 self._more_funcs.setMenu(self.contextMenu)
                 self._more_funcs.setPopupMode(QtWidgets.QToolButton.InstantPopup)
@@ -272,6 +272,7 @@ class MainWindow(QtWidgets.QMainWindow):
         def __init__(self, parent, *args, **kwargs):
             super().__init__(parent)
             self.main_window_widget: MainWindow = parent
+            self._practice.clicked.connect(self._practice_deck)
 
         def modified_configure_widgets(self):
             self._back.clicked.connect(self.main_window_widget.set_browse_decks_mode)

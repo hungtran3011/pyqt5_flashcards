@@ -169,5 +169,5 @@ class Ui__browse_deck(object):
         _browse_deck.setWindowTitle(_translate("_browse_deck", "Form"))
         self._add_deck_label.setText(_translate("_browse_deck", "All decks"))
         self._more_funcs.setText(_translate("_browse_deck", "..."))
-        self._add_deck.setText(_translate("_browse_deck", "Add deck"))
+        self._add_deck.setText(_translate("_browse_deck", "Add a new deck"))
         self._number_of_decks.setText(_translate("_browse_deck", "0 decks"))

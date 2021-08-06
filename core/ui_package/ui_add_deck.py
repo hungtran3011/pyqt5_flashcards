@@ -11,13 +11,13 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_new_add_deck(object):
-    def setupUi(self, new_add_deck):
-        new_add_deck.setObjectName("new_add_deck")
-        new_add_deck.resize(516, 321)
-        self.verticalLayout = QtWidgets.QVBoxLayout(new_add_deck)
+class Ui_add_deck(object):
+    def setupUi(self, add_deck):
+        add_deck.setObjectName("add_deck")
+        add_deck.resize(516, 321)
+        self.verticalLayout = QtWidgets.QVBoxLayout(add_deck)
         self.verticalLayout.setObjectName("verticalLayout")
-        self.deck_name = QtWidgets.QGroupBox(new_add_deck)
+        self.deck_name = QtWidgets.QGroupBox(add_deck)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -45,7 +45,7 @@ class Ui_new_add_deck(object):
         self.warning_label.setObjectName("warning_label")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.SpanningRole, self.warning_label)
         self.verticalLayout.addWidget(self.deck_name)
-        self._import_file = QtWidgets.QGroupBox(new_add_deck)
+        self._import_file = QtWidgets.QGroupBox(add_deck)
         self._import_file.setStyleSheet("")
         self._import_file.setObjectName("_import_file")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self._import_file)
@@ -92,7 +92,7 @@ class Ui_new_add_deck(object):
         self.imported_file_name.setObjectName("imported_file_name")
         self.verticalLayout_2.addWidget(self.imported_file_name)
         self.verticalLayout.addWidget(self._import_file)
-        self.frame = QtWidgets.QFrame(new_add_deck)
+        self.frame = QtWidgets.QFrame(add_deck)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -162,18 +162,18 @@ class Ui_new_add_deck(object):
         self.horizontalLayout.addWidget(self.cancel_button)
         self.verticalLayout.addWidget(self.frame)
 
-        self.retranslateUi(new_add_deck)
+        self.retranslateUi(add_deck)
         self.importing_radiobutton.toggled['bool'].connect(self.import_button.setEnabled)
-        QtCore.QMetaObject.connectSlotsByName(new_add_deck)
+        QtCore.QMetaObject.connectSlotsByName(add_deck)
 
-    def retranslateUi(self, new_add_deck):
+    def retranslateUi(self, add_deck):
         _translate = QtCore.QCoreApplication.translate
-        new_add_deck.setWindowTitle(_translate("new_add_deck", "Add deck"))
-        self.deck_name.setTitle(_translate("new_add_deck", "Deck name"))
-        self.label_deck_name.setText(_translate("new_add_deck", "Input deck name:"))
-        self.warning_label.setText(_translate("new_add_deck", "The name must not be blank"))
-        self._import_file.setTitle(_translate("new_add_deck", "Importing items"))
-        self.importing_radiobutton.setText(_translate("new_add_deck", "Importing files (.JSON, .XML and .CSV are supported)"))
-        self.import_button.setText(_translate("new_add_deck", "Import from file..."))
-        self.save_button.setText(_translate("new_add_deck", "Save"))
-        self.cancel_button.setText(_translate("new_add_deck", "Cancel"))
+        add_deck.setWindowTitle(_translate("add_deck", "Add a new deck"))
+        self.deck_name.setTitle(_translate("add_deck", "Deck name"))
+        self.label_deck_name.setText(_translate("add_deck", "Name for the deck:"))
+        self.warning_label.setText(_translate("add_deck", "The name must not be blank"))
+        self._import_file.setTitle(_translate("add_deck", "Import items"))
+        self.importing_radiobutton.setText(_translate("add_deck", "Import files (.JSON, .XML and .CSV are supported)"))
+        self.import_button.setText(_translate("add_deck", "Import from file..."))
+        self.save_button.setText(_translate("add_deck", "Save"))
+        self.cancel_button.setText(_translate("add_deck", "Cancel"))

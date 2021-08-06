@@ -33,7 +33,8 @@ class FlashcardsMode(Ui__show_cards, QtWidgets.QWidget):
         # self.flip_audio.setMedia(QtMultimedia.QMediaContent(flip_audio_link))
         self.flip_audio.setSource(flip_audio_link)
         # self._practice.clicked.connect(self._practiceDeck)
-        self._refresh.clicked.connect(self._refreshCards)
+        # self._refresh.clicked.connect(self._refreshCards)
+        self._refresh.hide()
 
     def configureWidgets(self):
         self.setWindowTitle(f"Cards from: {self.deck}")
