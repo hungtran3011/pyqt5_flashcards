@@ -1,6 +1,8 @@
 PyQt5 Flashcards
 ================
 
+A simple yet decent flashcards apps for desktop - run on popular operating systems such as Windows, MacOS and Linux. Executable files (.exe, .app, etc) will be available soon.
+
 Description
 -----------
 
