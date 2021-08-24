@@ -13,7 +13,7 @@ Description
 Functions
 ---------
 * Add decks and cards to study 
-* Use flashcards mode to review (w/o spaced repetition and process record) 
+* Use flashcards mode to review (w/ spaced repetition and process record) 
 * Edit and delete decks and cards 
 * Play simple games (multiple choices and box filling) with simple uniform spaced repetition algorithms
 
