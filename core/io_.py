@@ -5,8 +5,6 @@ from pathlib import Path
 import sys
 import csv
 import json
-# import xml.etree.ElementTree as ET
-# import xml.dom.minidom as minidom
 import defusedxml.ElementTree as ET
 import defusedxml.minidom as minidom
 from io import BytesIO

@@ -39,6 +39,9 @@ class GameMode(QtWidgets.QWidget, Ui_game_mode):
         wrong_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/wrong.wav")
         click_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/click.wav")
         congrats_audio_link = QtCore.QUrl.fromLocalFile(f"{AUDIO_DIR}/congratulations.mp3")
+        # I know that the QtMultimedia.QSoundEffect is better for sound effects like these ones
+        # However, it didn't work when I tested, so I chose the QMediaPlayer, which is quite slower
+        # and less responsive than the former.
         self.correct_audio = QtMultimedia.QMediaPlayer()
         self.correct_audio.setMedia(QtMultimedia.QMediaContent(correct_audio_link))
         self.wrong_audio = QtMultimedia.QMediaPlayer()

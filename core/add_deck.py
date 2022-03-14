@@ -42,7 +42,7 @@ class AddDeck(Ui_add_deck, QtWidgets.QDialog):
     def import_file(self):
         open_dialog = QtWidgets.QFileDialog(self)
         open_dialog.setAcceptMode(open_dialog.AcceptOpen)
-        self.file_obj = open_dialog.getOpenFileName(
+        self.file_obj: tuple = open_dialog.getOpenFileName(
             directory="~", filter="CSV Files (*.csv);; JSON Files (*.json);; XML Files (*.xml)")
         # The file_obj is a tuple returned by QFileDialog.getOpenFileName
         # with the structure ([FILE_DIRECTORY], [FILE_TYPE_FILTER])
@@ -116,6 +116,4 @@ class AddDeck(Ui_add_deck, QtWidgets.QDialog):
             self._send_message("The name of the imported file must not be blank")
         else:
             pass
-
-    # def mousePressEvent(self, event):
-    #     window.setNewCardsList(self.deck)
+            
