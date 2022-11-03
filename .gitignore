@@ -17,4 +17,4 @@ winvenv
 venv3.8
 # core/img
 # core/audio
-.idea/
+.idea
