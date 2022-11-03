@@ -15,9 +15,9 @@ IMG_DIR = ROOT_DIR / "../img"
 DECKS_DIR = ROOT_DIR / "../decks"
 
 if not os.path.isdir(IMG_DIR):
-    os.mkdir(IMG_DIR)
+    IMG_DIR = ROOT_DIR / "img"
 if not os.path.isdir(DECKS_DIR):
-    os.mkdir(DECKS_DIR)
+    DECKS_DIR = ROOT_DIR / "decks"
 
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
