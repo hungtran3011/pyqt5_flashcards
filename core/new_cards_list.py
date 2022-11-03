@@ -128,7 +128,10 @@ class NewCardsList(QtWidgets.QDialog, Ui_new_cards_list):
             raw_cards_data = inp.fetch_from_db_Deck()
         except shutil.Error:
             raw_cards_data = ()
-        num_of_cards = len(raw_cards_data)
+        try:
+            num_of_cards = len(raw_cards_data)
+        except TypeError:
+            num_of_cards = 0
         if num_of_cards > 0:
             for card in reversed(range(self.getCardsArea().count())):
                 tmp_widget = self.getCardsArea().itemAt(card).widget()

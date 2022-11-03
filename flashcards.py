@@ -9,7 +9,7 @@ very kind of you to help me out with the way of structuring the code - in an eff
 import shutil
 import sys
 import os
-from platform import system
+# from platform import system
 from pathlib import Path
 
 from PyQt5 import QtGui, QtWidgets, QtCore
@@ -25,7 +25,7 @@ from core.export_deck import ExportDeck
 ROOT_DIR = Path(
     getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 )
-SYSTEM = system()
+# SYSTEM = system()
 IMG_DIR = ROOT_DIR / "img"
 DECKS_DIR = ROOT_DIR / "decks"
 
@@ -36,6 +36,7 @@ if not os.path.isdir(DECKS_DIR):
 
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
@@ -83,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._new_cards_list.set_deck(deck)
         self.setWindowTitle(f"Cards list from deck: {deck}")
 
-    def resizeEvent(self, event: QtGui.QResizeEvent =None) -> None:
+    def resizeEvent(self, event: QtGui.QResizeEvent = None) -> None:
         print(self.height())
 
     class ModifiedBrowseDeck(BrowseDeck):
@@ -104,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.show_all_decks()
 
         def show_add_deck_popup(self, event=None):
-            self._dialog_add_deck = AddDeck(self)
+            _dialog_add_deck = AddDeck(self)
             self.show_all_decks()
 
         def show_flashcards_mode(self, deck):
@@ -247,15 +248,16 @@ class MainWindow(QtWidgets.QMainWindow):
             self.click_audio.play()
             if self.question_num < len(self.questions_list) - 1:
                 self.question_num += 1
-                self.show_game_progress(int((self.question_num) / len(self.questions_list) * 100))
+                self.show_game_progress(int(self.question_num / len(self.questions_list) * 100))
                 self.show_questions(self.question_num)
             else:
-                self.show_game_progress(int((self.question_num) / len(self.questions_list) * 100))
+                self.show_game_progress(int(self.question_num / len(self.questions_list) * 100))
                 self.end_test()
 
         def end_test(self):
             self._main_window_widget.set_browse_decks_mode()
-            self.send_message(f"Congrats! You've finished the game \n Your score: {self.score_} / {len(self.questions_list) * 10}", type="congratulations")
+            self.send_message(f"Congrats! You've finished the game \n Your score: {self.score_} \
+            / {len(self.questions_list) * 10}", type="congratulations")
             self.congrats_audio.play()
             super().end_test()
 

@@ -14,6 +14,7 @@ from core.ui_package.ui_deck_info import Ui__deck_info
 
 from core.add_deck import AddDeck
 from core.rename_deck import RenameDeck
+
 # from core.settings import Settings
 
 ROOT_DIR = Path(
@@ -29,6 +30,7 @@ if not (os.path.isdir(str(IMG_DIR)) and os.path.isdir(str(DECKS_DIR))):
 ADD_DECK_ICON = str(IMG_DIR / "add_deck.svg")
 ADD_CARDS_ICON = str(IMG_DIR / "add_cards.svg")
 
+
 class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
         super().__init__()
@@ -41,32 +43,34 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         self.show_all_decks()
 
     def show_all_decks(self):
-        DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
-        DECKS_NUM = len(DECKS_LIST)
-        if len(DECKS_LIST) > 0:
+        decks_list = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
+        print(decks_list)
+        decks_num = len(decks_list)
+        if len(decks_list) > 0:
             print(self._all_decks_area.width())
             columns = self._all_decks_area.width() // 480
-            full_rows_num = DECKS_NUM // columns
+            full_rows_num = decks_num // columns
             print(f"columns = {columns}, full_rows_num = {full_rows_num}")
-            remainder = DECKS_NUM % columns
+            remainder = decks_num % columns
             for deck in reversed(range(self.getDecksArea().count())):
                 tmp_widget = self.getDecksArea().itemAt(deck).widget()
                 self.getDecksArea().removeWidget(tmp_widget)
                 tmp_widget.setParent(None)
                 tmp_widget.deleteLater()
-           
+
             for row in range(full_rows_num):
                 for col in range(columns):
                     index = columns * row + col
+                    file_name_without_ext = os.path.splitext(decks_list[index])[0]
                     deck_name = self.DeckInfo(
-                            self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}")
+                        self, f"{file_name_without_ext}")
                     self.getDecksArea().addWidget(deck_name, row, col)
             if remainder != 0:
                 new_row = full_rows_num
                 for col in range(remainder):
                     index = new_row * columns + col
                     deck_name = self.DeckInfo(
-                            self, f"{DECKS_LIST[index][0:len(DECKS_LIST[index]) - 3]}"
+                        self, f"{decks_list[index][0:len(decks_list[index]) - 3]}"
                     )
                     self.getDecksArea().addWidget(deck_name, new_row, col)
             self.set_number_of_decks()
@@ -77,11 +81,11 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         return self.gridLayout
 
     def set_number_of_decks(self):
-        DECKS_LIST = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
-        DECKS_NUM = len(DECKS_LIST)
-        text = f'{DECKS_NUM} deck' if DECKS_NUM == 1 else f'{DECKS_NUM} decks'
+        decks_list = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
+        decks_num = len(decks_list)
+        text = f'{decks_num} deck' if decks_num == 1 else f'{decks_num} decks'
         self._number_of_decks.setText(text)
-        return DECKS_NUM
+        return decks_num
 
     def showAddDeckPopup(self, event=None):
         self._dialog_add_deck = AddDeck(self)
@@ -93,7 +97,7 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         menu = QtWidgets.QMenu(self)
         menu.addAction("Refresh").triggered.connect(self.show_all_decks)
         menu.popup(self.mapToGlobal(event.pos()))
-    
+
     def insert_icon(self):
         _add_deck_icon = QtSvg.QSvgWidget(ADD_DECK_ICON, self)
         _add_deck_icon.mousePressEvent = self.showAddDeckPopup
@@ -109,7 +113,7 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             tmp_widget.deleteLater()
         self.set_number_of_decks()
         self.getDecksArea().addWidget(_add_deck_icon, 0, 0)
-        self.getDecksArea().addWidget(_add_deck_label, 1, 0)   
+        self.getDecksArea().addWidget(_add_deck_label, 1, 0)
 
     class DeckInfo(Ui__deck_info, QtWidgets.QGroupBox):
         def __init__(self, parent, deck):
@@ -125,12 +129,12 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             self._view_cards_list.setCursor(QtCore.Qt.PointingHandCursor)
             self._flash_mode.setCursor(QtCore.Qt.PointingHandCursor)
             self._more_funcs.setCursor(QtCore.Qt.PointingHandCursor)
-            self._evaluateNumOfCards()
-            self._evaluateNumOfCardsToReview()
+            self._evaluate_num_of_cards()
+            self._evaluate_num_of_cards_to_review()
             self.setCursor(QtCore.Qt.PointingHandCursor)
             self.setToolTip("Click the title to view cards list")
 
-        def _evaluateNumOfCards(self):
+        def _evaluate_num_of_cards(self):
             deck_name = self.getDeckName()
             inp = io_.SQLiteImporter(deck_name)
             try:
@@ -140,7 +144,7 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             text = f'{number} card' if number == 1 else f'{number} cards'
             self._num_of_cards.setText(text)
 
-        def _evaluateNumOfCardsToReview(self):
+        def _evaluate_num_of_cards_to_review(self):
             deck_name = self.getDeckName()
             inp = io_.SQLiteImporter(deck_name)
             dates = inp.fetch_from_db_Date_()
