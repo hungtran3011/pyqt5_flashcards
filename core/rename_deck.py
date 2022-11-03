@@ -33,8 +33,8 @@ class RenameDeck(QtWidgets.QDialog, Ui__rename_deck):
         self.exec_()
 
     def _saveDeckName(self):
-        file_name = f"{ROOT_DIR}/decks/{self.deck}.db"
-        new_file_name = f"{ROOT_DIR}/decks/{self._name_box.text()}.db"
+        file_name = f"{DECKS_DIR}/{self.deck}.db"
+        new_file_name = f"{DECKS_DIR}/{self._name_box.text()}.db"
         os.rename(file_name, new_file_name)
         os.rename(f"{IMG_DIR}/{self.deck}",
                   f"{IMG_DIR}/{self._name_box.text()}")

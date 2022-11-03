@@ -176,4 +176,4 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             #     self.close()
 
         def renameDeck(self):
-            self._rename_window = RenameDeck(self, self.deck)
+            _rename_window = RenameDeck(self, self.deck)
