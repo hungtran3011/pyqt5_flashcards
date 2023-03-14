@@ -7,7 +7,7 @@ Description
 -----------
 
 - This is a basic flashcards app made of **Python** and **Qt**. Add some decks and cards, then start reviewing with flashcards mode (real-life flashcards simulation - to review any time) and game mode (play some games with the cards and ) 
-- Python version is used here: **<a href="https://docs.python.org/3/whatsnew/3.8.html">Python 3.8</a>**.
+- Python version is used here: **<a href="https://docs.python.org/3/whatsnew/3.8.html">Python 3.8 or higher</a>**.
 - Qt version is used here: **<a href="https://pypi.org/project/PyQt5/">PyQt5</a> (Qt bindings for Python)**, with Qt 5.15
 
 Functions
