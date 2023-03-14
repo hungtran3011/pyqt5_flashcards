@@ -5,6 +5,8 @@ from platform import system
 from datetime import date
 import shutil
 import sqlite3 as sql
+from datetime import datetime
+from uuid import uuid4
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -36,7 +38,7 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
 
     def _save_single_card(self):
         inp = io_.SQLiteImporter(self.deck)
-        index = len(inp.fetch_from_db_Deck()) + 1
+        index = datetime.now().strftime('%Y%m%d%H%M%S-') + str(uuid4())
         out = io_.SQLiteExporter(self.deck)
         front: str = self.front_box.toPlainText()
         back: str = self.back_box.toPlainText()
@@ -51,7 +53,7 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
                 out.writeToDB(data_card, "DECK")
                 out.writeToDB(data_date, "DATE_")
             except sql.IntegrityError:
-                self._send_message(f"Card '{front}' is already exist", "Card exist")
+                self._send_message(text=f"Card '{front}' is already exist", title="Card exist")
             if self.img_file != "":
                 shutil.copyfile(self.img_file, f"{IMG_DIR}/{self.deck}/{img_file}")
             else:
@@ -59,6 +61,7 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
             self.close()
         else:
             self._send_message("The front and back of the card must not be empty")
+        inp.close()
     
     def _save_multiple_cards(self):
         pass
@@ -71,7 +74,7 @@ class AddCards(QtWidgets.QDialog, Ui_add_card):
         pixmap = QtGui.QPixmap(self.img_file)
         self.img.setPixmap(pixmap.scaledToHeight(200))
 
-    def _send_message(self, text, title=""):
+    def _send_message(self, text="", title=""):
         message = QtWidgets.QMessageBox(self)
         message.setWindowTitle(title)
         message.setIcon(QtWidgets.QMessageBox.Warning)

@@ -35,9 +35,12 @@ class RenameDeck(QtWidgets.QDialog, Ui__rename_deck):
     def _saveDeckName(self):
         file_name = f"{DECKS_DIR}/{self.deck}.db"
         new_file_name = f"{DECKS_DIR}/{self._name_box.text()}.db"
-        os.rename(file_name, new_file_name)
-        os.rename(f"{IMG_DIR}/{self.deck}",
-                  f"{IMG_DIR}/{self._name_box.text()}")
+        try:
+            os.rename(file_name, new_file_name)
+            os.rename(f"{IMG_DIR}/{self.deck}",
+                    f"{IMG_DIR}/{self._name_box.text()}")
+        except Exception as e:
+            print(e)
         self.close()
         self.parent().setDeckName(self._name_box.text())
         # window.setBrowseDecksMode()

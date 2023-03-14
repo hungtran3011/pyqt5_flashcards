@@ -44,19 +44,24 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
 
     def show_all_decks(self):
         decks_list = [i for i in os.listdir(DECKS_DIR) if i.endswith(".db")]
-        print(decks_list)
+        # print(decks_list)
         decks_num = len(decks_list)
         if len(decks_list) > 0:
             print(self._all_decks_area.width())
             columns = self._all_decks_area.width() // 480
-            full_rows_num = decks_num // columns
+            try:
+                full_rows_num = decks_num // columns
+            except ZeroDivisionError:
+                columns = 1
+                full_rows_num = decks_num // columns
             print(f"columns = {columns}, full_rows_num = {full_rows_num}")
             remainder = decks_num % columns
-            for deck in reversed(range(self.getDecksArea().count())):
-                tmp_widget = self.getDecksArea().itemAt(deck).widget()
-                self.getDecksArea().removeWidget(tmp_widget)
-                tmp_widget.setParent(None)
-                tmp_widget.deleteLater()
+            if self.getDecksArea().count() != 0:
+                for deck in reversed(range(self.getDecksArea().count())):
+                    tmp_widget = self.getDecksArea().itemAt(deck).widget()
+                    self.getDecksArea().removeWidget(tmp_widget)
+                    tmp_widget.setParent(None)
+                    tmp_widget.deleteLater()
 
             for row in range(full_rows_num):
                 for col in range(columns):
@@ -88,15 +93,19 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
         return decks_num
 
     def showAddDeckPopup(self, event=None):
-        self._dialog_add_deck = AddDeck(self)
+        print("children:", self.getDecksArea().parent().findChildren(self.DeckInfo))
+        _dialog_add_deck = AddDeck(self)
+        self.show_all_decks()
+        print("children after add decks:", self.getDecksArea().parent().findChildren(self.DeckInfo))
 
     def keyPressEvent(self, event=QtCore.Qt.Key_F5):
         self.show_all_decks()
 
     def mousePressEvent(self, event):
-        menu = QtWidgets.QMenu(self)
-        menu.addAction("Refresh").triggered.connect(self.show_all_decks)
-        menu.popup(self.mapToGlobal(event.pos()))
+        if event.button() == QtCore.Qt.RightButton:
+            menu = QtWidgets.QMenu(self)
+            menu.addAction("Refresh").triggered.connect(self.show_all_decks)
+            menu.popup(self.mapToGlobal(event.pos()))
 
     def insert_icon(self):
         _add_deck_icon = QtSvg.QSvgWidget(ADD_DECK_ICON, self)
@@ -143,6 +152,7 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
                 number = 0
             text = f'{number} card' if number == 1 else f'{number} cards'
             self._num_of_cards.setText(text)
+            inp.close()
 
         def _evaluate_num_of_cards_to_review(self):
             deck_name = self.getDeckName()
@@ -154,6 +164,7 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
                     number += 1
             text = f'{number} card to review' if number == 1 else f'{number} cards to review'
             self._cards_to_review.setText(text)
+            inp.close()
 
         def setDeckName(self, new_name):
             self._deck_name.setText(new_name)
@@ -175,5 +186,5 @@ class BrowseDeck(Ui__browse_deck, QtWidgets.QWidget):
             # finally:
             #     self.close()
 
-        def renameDeck(self):
+        def rename_deck(self):
             _rename_window = RenameDeck(self, self.deck)

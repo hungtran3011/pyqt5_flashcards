@@ -96,17 +96,19 @@ class MainWindow(QtWidgets.QMainWindow):
             super().__init__(parent)
             self._main_window_widget: MainWindow = parent
             self._add_deck.clicked.connect(self.show_add_deck_popup)
-            try:
-                self.show_all_decks()
-            except ZeroDivisionError:
-                pass
+            # try:
+            self.show_all_decks()
+            # except ZeroDivisionError:
+            #     pass
 
         def resizeEvent(self, event):
             self.show_all_decks()
 
         def show_add_deck_popup(self, event=None):
+            print("children:", self.getDecksArea().parent().findChildren(self.DeckInfo))
             _dialog_add_deck = AddDeck(self)
             self.show_all_decks()
+            print("children after add decks:", self.getDecksArea().parent().findChildren(self.DeckInfo))
 
         def show_flashcards_mode(self, deck):
             self._main_window_widget.set_flashcards_mode(deck)
@@ -124,6 +126,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 img_folder_name = f"{IMG_DIR}/{name}"
                 shutil.rmtree(img_folder_name)
             except FileNotFoundError:
+                pass
+            except PermissionError:
                 pass
             self.show_all_decks()
 
@@ -152,6 +156,8 @@ class MainWindow(QtWidgets.QMainWindow):
                         }
                 """
             )
+            refresh = function_menu.addAction("Refresh")
+            refresh.triggered.connect(self.show_all_decks)
             settings = function_menu.addAction("Settings...")
             settings.triggered.connect(self.show_settings)
             self._more_funcs.setMenu(function_menu)
@@ -195,10 +201,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 """
                 )
                 self._context_menu.addAction("Delete this deck").triggered.connect(lambda: self.delete_deck(self.getDeckName()))
-                self._context_menu.addAction("Rename this deck").triggered.connect(self.renameDeck)
+                self._context_menu.addAction("Rename this deck").triggered.connect(self.rename_deck)
                 self._context_menu.addAction("Export cards").triggered.connect(self.export_deck)
                 self._more_funcs.setMenu(self._context_menu)
                 self._more_funcs.setPopupMode(QtWidgets.QToolButton.InstantPopup)
+                # self.setMenu(self._context_menu)
+                self.clicked.connect(self.show_view_cards_mode)
 
             def show_flashcards_mode(self):
                 self.parent_widget.show_flashcards_mode(self.deck)
@@ -213,7 +221,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.parent_widget.delete_deck(name)
 
             def rename_deck(self):
-                self.renameDeck()
+                super().rename_deck()
                 self.parent_widget.show_all_decks()
 
             def export_deck(self):
@@ -222,6 +230,12 @@ class MainWindow(QtWidgets.QMainWindow):
                     directory=f"~/Documents/{self.deck}", 
                     filter="CSV Files (*.csv);; JSON Files (*.json);; XML Files (*.xml)"
                 )
+
+            def mousePressEvent(self, event):
+                if event.button() == QtCore.Qt.RightButton:
+                    self._context_menu.popup(self.mapToGlobal(event.pos()))
+                else:
+                    self.parent_widget.show_view_cards_mode(self.deck)
 
     class ModifiedNewCardsList(NewCardsList):
         def __init__(self, parent, *args, **kwargs):

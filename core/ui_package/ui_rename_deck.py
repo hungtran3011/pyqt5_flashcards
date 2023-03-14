@@ -45,9 +45,39 @@ class Ui__rename_deck(object):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self._cancel = QtWidgets.QPushButton(self._button_frame)
         self._cancel.setObjectName("_cancel")
+        self._cancel.setStyleSheet("QPushButton{\n"
+"    /*background: #d3d3d3;*/\n"
+"    border: 2px solid #91e67b;\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"    padding-left: 10px;\n"
+"    padding-right: 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color: #91e67b;\n"
+"    color: white;\n"
+"}\n"
+"")
         self.horizontalLayout.addWidget(self._cancel)
         self._save = QtWidgets.QPushButton(self._button_frame)
         self._save.setObjectName("_save")
+        self._save.setStyleSheet("QPushButton{\n"
+"    background: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 0 #77bd65, stop: 1 #91e67b );\n"
+"    color: white;\n"
+"    border-radius: 5px;\n"
+"    padding: 5px;\n"
+"    padding-left: 10px;\n"
+"    padding-right: 10px;\n"
+"}\n"
+"\n"
+"QPushButton:hover{\n"
+"    background-color: #81cc6e;\n"
+"}\n"
+"\n"
+"QPushButton:pressed{\n"
+"    background-color: QLinearGradient( x1: 0, y1: 0, x2: 1, y2: 0, stop: 1 #77bd65, stop: 0 #91e67b );\n"
+"}")
         self.horizontalLayout.addWidget(self._save)
         self.verticalLayout.addWidget(self._button_frame)
 

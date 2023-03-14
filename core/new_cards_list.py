@@ -178,30 +178,34 @@ class NewCardsList(QtWidgets.QDialog, Ui_new_cards_list):
 
     def _delete_card(self, card:str):
         print(card)
-        db = io_.SQLiteImporter(self.deck)
-        out = io_.SQLiteExporter(self.deck)
-        out.cursor.execute("DELETE FROM DECK WHERE FRONT = ?", (card,))
-        out.conn.commit()
-        out.cursor.execute("DELETE FROM DATE_ WHERE CARD = ?", (card,))
-        out.conn.commit()
-        db.cursor.execute("SELECT FRONT, BACK, IMG FROM DECK")
-        tmp_deck = db.cursor.fetchall()
-        out.cursor.execute("DROP TABLE DECK")
-        out.conn.commit()
-        out.createTable("DECK")
-        self.cards_data = []
-        for key, val in enumerate(tmp_deck):
-            data = (key + 1,) + val
-            out.writeToDB(data, "DECK")
-            self.cards_data.append(data)
-        db.cursor.execute("SELECT CARD, LAST_REVIEW, NEXT_REVIEW FROM DATE_")
-        tmp_date = db.cursor.fetchall()
-        out.cursor.execute("DROP TABLE DATE_")
-        out.conn.commit()
-        out.createTable("DATE_")
-        for key, val in enumerate(tmp_date):
-            data = (key + 1,) + val
-            out.writeToDB(data, "DATE_")
+        output = io_.SQLiteExporter(self.deck)
+        output.delete_from_db_Deck(card)
+        output.delete_from_db_Date(card)  
+        self._createCardsList()
+        # db = io_.SQLiteImporter(self.deck)
+        # out = io_.SQLiteExporter(self.deck)
+        # out.cursor.execute("DELETE FROM DECK WHERE FRONT = ?", (card,))
+        # out.conn.commit()
+        # out.cursor.execute("DELETE FROM DATE_ WHERE CARD = ?", (card,))
+        # out.conn.commit()
+        # db.cursor.execute("SELECT FRONT, BACK, IMG FROM DECK")
+        # tmp_deck = db.cursor.fetchall()
+        # out.cursor.execute("DROP TABLE DECK")
+        # out.conn.commit()
+        # out.createTable("DECK")
+        # self.cards_data = []
+        # for key, val in enumerate(tmp_deck):
+        #     data = (key + 1,) + val
+        #     out.writeToDB(data, "DECK")
+        #     self.cards_data.append(data)
+        # db.cursor.execute("SELECT CARD, LAST_REVIEW, NEXT_REVIEW FROM DATE_")
+        # tmp_date = db.cursor.fetchall()
+        # out.cursor.execute("DROP TABLE DATE_")
+        # out.conn.commit()
+        # out.createTable("DATE_")
+        # for key, val in enumerate(tmp_date):
+        #     data = (key + 1,) + val
+        #     out.writeToDB(data, "DATE_")
         self._createCardsList()
 
     def keyPressEvent(self, event):

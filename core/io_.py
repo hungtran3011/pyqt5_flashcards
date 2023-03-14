@@ -77,6 +77,9 @@ class SQLiteImporter:
         except AttributeError:
             pass
 
+    def close(self):
+        self.conn.close()
+
 
 
 class SQLiteExporter:
@@ -127,8 +130,17 @@ class SQLiteExporter:
         else:
             raise ValueError("Table not existed")
 
-    def deleteItem(self, table: str, item: str, ):
-        pass
+    def delete_item(self, table: str, item: str, ):
+        self.cursor.execute(f"DELETE FROM {table} WHERE FRONT = ?", (item,))
+
+    def delete_from_db_Deck(self, item: str):
+        self.delete_item("DECK", item)
+    
+    def delete_from_db_Date_(self, item: str):
+        self.delete_item("DATE_", item)
+
+    def close(self):
+        self.conn.close()
 
 
 class CSVExporter:

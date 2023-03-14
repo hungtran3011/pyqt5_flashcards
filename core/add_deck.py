@@ -91,7 +91,7 @@ class AddDeck(Ui_add_deck, QtWidgets.QDialog):
                     out.createTable("DATE_")
                     os.chdir(f"{IMG_DIR}")
                     os.mkdir(f"{IMG_DIR}/{name}")
-                    del out
+                    out.close()
                     self.close()
                 else:
                     self._send_message(f"""Can't add new deck. Please try a different name.
@@ -109,6 +109,7 @@ class AddDeck(Ui_add_deck, QtWidgets.QDialog):
                         (card[0], card[1], None, date.today()),
                          "DATE_"
                     )
+                output.close()
                 self.close()
             except sql.OperationalError:
                 self._send_message("Error in importing file(s)")
